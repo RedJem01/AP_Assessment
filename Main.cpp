@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include "Account.cpp"
+#include "Transaction.cpp"
 
 int main()
 {
