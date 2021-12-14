@@ -9,6 +9,24 @@ class Account
 		std::vector<Transaction> history;
 
 	public:
+		void setBalance(int b)   //Setting balance
+		{
+			balance = b;
+		}
+		int getBalance()    //Getting balance
+		{
+			return balance;
+		}
+
+		void setHistory(std::vector<Transaction> h)  //Setting history
+		{
+			history = h;
+		}
+		std::vector<Transaction> getHistory()   //Getting history
+		{
+			return history;
+		}
+
 		void virtual deposit()
 		{
 
@@ -61,7 +79,7 @@ class Savings : public Account, public InterestEarning
 {
 	protected:
 		int interestRate;
-		int isa;
+		bool isa;
 
 	public:
 		void computeInterest()

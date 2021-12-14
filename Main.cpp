@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 #include "Account.cpp"
 #include "Transaction.cpp"
 
@@ -9,7 +10,8 @@ int main()
 {
 	std::vector <std::string> parameters;
 	std::string userCommand;
-	// you may also want to store a collection of opened accounts here
+	std::vector <Account*> openedAccounts;
+	bool caOpened = false;
 
 	std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
 
@@ -42,7 +44,24 @@ int main()
 		else if (command.compare("open") == 0)
 		{
 			// allow a user to open an account
-			// e.g., Account* a = new Savings(...);
+			std::string accountChoice;
+			int i;
+			std::cout << "What kind of account would you like to open? Please input 1 for a current account, 2 for a regular savings acount or 3 for an ISA savings account." << std::endl;
+			std::getline(std::cin, accountChoice);   //User input what kind of account
+			if (accountChoice == "1")   //If current account
+			{
+				if (caOpened == true)
+				{
+					std::cout << "A current accont already exists. Please choose a different type of account" << std::endl;
+					main();
+				}
+				Account* c = new Current();
+				std::cout << "How much would you like to open this bank with?" << std::endl;
+				std::cin >> i;
+				c->setBalance(i);
+				openedAccounts.emplace_back(c);
+				caOpened = true;
+			}
 		}
 		else if (command.compare("view") == 0)
 		{
