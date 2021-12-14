@@ -12,6 +12,7 @@ int main()
 	std::string userCommand;
 	std::vector <Account*> openedAccounts;
 	bool caOpened = false;
+	bool isaOpened = false;
 
 	std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
 
@@ -44,23 +45,71 @@ int main()
 		else if (command.compare("open") == 0)
 		{
 			// allow a user to open an account
-			std::string accountChoice;
-			int i;
-			std::cout << "What kind of account would you like to open? Please input 1 for a current account, 2 for a regular savings acount or 3 for an ISA savings account." << std::endl;
-			std::getline(std::cin, accountChoice);   //User input what kind of account
-			if (accountChoice == "1")   //If current account
+			bool loop = true;
+			while (loop = true)   //Input verification
 			{
-				if (caOpened == true)
+				std::string accountChoice;
+				int input;
+				std::cout << "What kind of account would you like to open? Please input 1 for a current account, 2 for a regular savings acount or 3 for an ISA savings account." << std::endl;
+				std::getline(std::cin, accountChoice);   //User input what kind of account
+				if (accountChoice == "1")   //If current account
 				{
-					std::cout << "A current accont already exists. Please choose a different type of account" << std::endl;
-					main();
+					if (caOpened == true)
+					{
+						std::cout << "A current account already exists. Please choose a different type of account" << std::endl;
+						main();
+					}
+					Account* c = new Current();   //Opening new current account
+					std::cout << "How much would you like to open this account with?" << std::endl;
+					std::cin >> input;
+					c->setBalance(input);    //Setting account's balance as whatever is inputted
+					openedAccounts.emplace_back(c);     //Putting the object into the accounts list 
+					caOpened = true;    //An account has been opened so another can't be opened
+					loop = false;
 				}
-				Account* c = new Current();
-				std::cout << "How much would you like to open this bank with?" << std::endl;
-				std::cin >> i;
-				c->setBalance(i);
-				openedAccounts.emplace_back(c);
-				caOpened = true;
+				else if (accountChoice == "2")   //If savings account
+				{
+					Savings* s = new Savings();  //Opening new savings account
+					s->setInterestRate(0.85);   //Setting interest rate
+					s->setIsa(false);   //Setting whether or not isa
+					std::cout << "How much would you like to open this account with?" << std::endl;
+					std::cin >> input;
+					s->setBalance(input);   
+					openedAccounts.emplace_back(s);
+					loop = false;
+				}
+				else if (accountChoice == "3")  //If ISA account
+				{
+					if (isaOpened == true)  //Check if it has been opened before as only 1 can be opened
+					{
+						std::cout << "An ISA account already exists. Please choose a different type of account" << std::endl;
+						main();
+					}
+					bool loop2 = true;
+					Savings* i = new Savings();   //Opening new ISA account through savings
+					i->setInterestRate(1.15);  
+					i->setIsa(true);
+					while (loop2 = true)  //This is to check the opening balance is over 1000
+					{ 
+						std::cout << "How much would you like to open this account with? The total has to be over £1000" << std::endl;
+						std::cin >> input;
+						if (input < 1000)
+						{
+							std::cout << "That is not over £1000. Please input an amount over £1000." << std::endl;
+						}
+						else
+						{
+							loop2 = false;
+						}
+					}
+					i->setBalance(input);
+					openedAccounts.emplace_back(i);
+					loop = false;
+				}
+				else
+				{
+					std::cout << "Please only input 1,2 or 3." << std::endl;
+				}
 			}
 		}
 		else if (command.compare("view") == 0)

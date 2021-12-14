@@ -58,7 +58,6 @@ class Current : public Account
 	public:
 		int overdraft;
 
-	public:
 		void deposti()
 		{
 
@@ -82,6 +81,24 @@ class Savings : public Account, public InterestEarning
 		bool isa;
 
 	public:
+		void setInterestRate(int ir)   //Setting balance
+		{
+			interestRate = ir;
+		}
+		int getInterestRate()    //Getting balance
+		{
+			return interestRate;
+		}
+
+		void setIsa(bool i)   //Setting balance
+		{
+			isa = i;
+		}
+		int getIsa()    //Getting balance
+		{
+			return isa;
+		}
+
 		void computeInterest()
 		{
 
