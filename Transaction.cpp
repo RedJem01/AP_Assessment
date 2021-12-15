@@ -1,44 +1,37 @@
 #include <iostream>
 #include "transaction.h"
 
-class Transaction
+using namespace T;
+void Transaction::setDesc(std::string d)   //Setting desc
 {
-	protected:
-		std::string desc;
-		std::string timestamp;
-		std::string value;
+	desc = d;
+}
+std::string Transaction::getDesc()    //Getting desc
+{
+	return desc;
+}
 
-	public:
-		void setDesc(std::string d)   //Setting desc
-		{
-			desc = d;
-		}
-		std::string getDesc()    //Getting desc
-		{
-			return desc;
-		}
+void Transaction::setTimeStamp(std::string ts)   //Setting timestamp
 
-		void setTimeStamp(std::string ts)   //Setting timestamp
+{
+	timestamp = ts;
+}
+std::string Transaction::getTimeStamp()    //Getting timestamp
+{
+	return timestamp;
+}
 
-		{
-			timestamp = ts;
-		}
-		std::string getTimeStamp()    //Getting timestamp
-		{
-			return timestamp;
-		}
+void Transaction::setValue(std::string v)   //Setting value
+{
+	value = v;
+}
+std::string Transaction::getValue()    //Getting value
+{
+	return value;
+}
 
-		void setValue(std::string v)   //Setting value
-		{
-			value = v;
-		}
-		std::string getValue()    //Getting value
-		{
-			return value;
-		}
+void Transaction::toString()
+{
+	std::cout << "1" << std::endl;
+}
 
-		void toString()
-		{
-
-		}
-};

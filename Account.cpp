@@ -3,120 +3,87 @@
 #include "Account.h"
 #include "Transaction.h"
 
-class Account
+using namespace A;
+using namespace T;
+
+
+void Account::setBalance(int b)   //Setting balance
 {
-	private:
-		int balance;
-		std::vector<Transaction> history;
-
-	public:
-		void setBalance(int b)   //Setting balance
-		{
-			balance = b;
-		}
-		int getBalance()    //Getting balance
-		{
-			return balance;
-		}
-
-		void setHistory(std::vector<Transaction> h)  //Setting history
-		{
-			history = h;
-		}
-		std::vector<Transaction> getHistory()   //Getting history
-		{
-			return history;
-		}
-
-		void virtual deposit()
-		{
-
-		}
-
-		void toString()
-		{
-
-		}
-
-		void virtual withdraw()
-		{
-
-		}
-
-};
-
-class InterestEarning
+	balance = b;
+}
+int Account::getBalance()    //Getting balance
 {
-	public:
-		void virtual computeInterest()
-		{
+	return balance;
+}
 
-		}
-};
-
-class Current : public Account
+void Account::setHistory(std::vector<Transaction> h)  //Setting history
 {
-	public:
-		int overdraft;
-
-		void deposit()
-		{
-
-		}
-
-		void toString()
-		{
-
-		}
-
-		void withdraw()
-		{
-
-		}
-};
-
-class Savings : public Account, public InterestEarning
+	history = h;
+}
+std::vector<Transaction> Account::getHistory()   //Getting history
 {
-	protected:
-		int interestRate;
-		bool isa;
+	return history;
+}
 
-	public:
-		void setInterestRate(int ir)   //Setting balance
-		{
-			interestRate = ir;
-		}
-		int getInterestRate()    //Getting balance
-		{
-			return interestRate;
-		}
+void Account::toString()
+{
+	std::cout << "1" << std::endl;
+}
 
-		void setIsa(bool i)   //Setting balance
-		{
-			isa = i;
-		}
-		int getIsa()    //Getting balance
-		{
-			return isa;
-		}
 
-		void computeInterest()
-		{
 
-		}
+void Current::deposit()
+{
+	std::cout << "1" << std::endl;
+}
 
-		void deposit()
-		{
+void Current::toString()
+{
+	std::cout << "1" << std::endl;
+}
 
-		}
+void Current::withdraw()
+{
+	std::cout << "1" << std::endl;
+}
 
-		void toString()
-		{
 
-		}
 
-		void withdraw()
-		{
 
-		}
-};
+void Savings::setInterestRate(int ir)   //Setting balance
+{
+	interestRate = ir;
+}
+int Savings::getInterestRate()    //Getting balance
+{
+	return interestRate;
+}
+
+void Savings::setIsa(bool i)   //Setting balance
+{
+	isa = i;
+}
+int Savings::getIsa()    //Getting balance
+{
+	return isa;
+}
+
+void Savings::computeInterest()
+{
+	std::cout << "1" << std::endl;
+}
+
+void Savings::deposit()
+{
+	std::cout << "1" << std::endl;
+}
+
+void Savings::toString()
+{
+	std::cout << "1" << std::endl;
+}
+
+void Savings::withdraw()
+{
+	std::cout << "1" << std::endl;
+}

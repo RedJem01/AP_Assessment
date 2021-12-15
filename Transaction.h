@@ -1,10 +1,12 @@
-#pragma once
 #include <iostream>
 #ifndef Transaction_h
 #define Transaction_h
 
-class Transaction
+
+namespace T
 {
+	class Transaction
+	{
 	protected:
 		std::string desc;
 		std::string timestamp;
@@ -25,6 +27,7 @@ class Transaction
 
 		void toString();
 
-};
+	};
+}
 #endif
 
