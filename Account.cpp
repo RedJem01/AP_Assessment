@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "Transaction.cpp"
+#include "Account.h"
+#include "Transaction.h"
 
 class Account
 {
@@ -58,7 +59,7 @@ class Current : public Account
 	public:
 		int overdraft;
 
-		void deposti()
+		void deposit()
 		{
 
 		}
