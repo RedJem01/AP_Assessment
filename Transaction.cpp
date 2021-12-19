@@ -1,7 +1,7 @@
 #include <iostream>
 #include "transaction.h"
 
-using namespace T;
+
 void Transaction::setDesc(std::string d)   //Setting desc
 {
 	desc = d;

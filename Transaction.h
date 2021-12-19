@@ -2,32 +2,29 @@
 #ifndef Transaction_h
 #define Transaction_h
 
-
-namespace T
+class Transaction
 {
-	class Transaction
-	{
-	protected:
-		std::string desc;
-		std::string timestamp;
-		std::string value;
+protected:
+	std::string desc;
+	std::string timestamp;
+	std::string value;
 
-	public:
-		void setDesc(std::string d);   //Setting desc
+public:
+	void setDesc(std::string d);   //Setting desc
 
-		std::string getDesc();    //Getting desc
+	std::string getDesc();    //Getting desc
 
-		void setTimeStamp(std::string ts);   //Setting timestamp
+	void setTimeStamp(std::string ts);   //Setting timestamp
 
-		std::string getTimeStamp();    //Getting timestamp
+	std::string getTimeStamp();    //Getting timestamp
 
-		void setValue(std::string v);   //Setting value
+	void setValue(std::string v);   //Setting value
 
-		std::string getValue();    //Getting value
+	std::string getValue();    //Getting value
 
-		void toString();
+	void toString();
 
-	};
-}
+};
+
 #endif
 

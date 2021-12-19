@@ -3,9 +3,6 @@
 #include "Account.h"
 #include "Transaction.h"
 
-using namespace A;
-using namespace T;
-
 
 void Account::setBalance(int b)   //Setting balance
 {
@@ -25,10 +22,13 @@ std::vector<Transaction> Account::getHistory()   //Getting history
 	return history;
 }
 
+
+
 void Account::toString()
 {
 	std::cout << "1" << std::endl;
 }
+
 
 
 

@@ -2,74 +2,70 @@
 #define Account_h
 #include "Transaction.h"
 
-using namespace T;
-namespace A
+class Account
 {
+private:
+	int balance;
+	std::vector<Transaction> history;
 
-	class Account
-	{
-	private:
-		int balance;
-		std::vector<Transaction> history;
+public:
+	void setBalance(int b);   //Setting balance
 
-	public:
-		void setBalance(int b);   //Setting balance
+	int getBalance();    //Getting balance
 
-		int getBalance();    //Getting balance
+	void setHistory(std::vector<Transaction> h);  //Setting history
 
-		void setHistory(std::vector<Transaction> h);  //Setting history
-
-		std::vector<Transaction> getHistory();   //Getting history
+	std::vector<Transaction> getHistory();   //Getting history
 
 
-		void virtual deposit();
+	void virtual deposit() = 0;
 
-		void toString();
+	void toString();
 
-		void virtual withdraw();
-	};
+	void virtual withdraw() = 0;
+};
 
-	class InterestEarning
-	{
-	public:
-		void virtual computeInterest();
-	};
+class InterestEarning
+{
+public:
+	void virtual computeInterest() = 0;
+};
 
-	class Current : public Account
-	{
-	public:
-		int overdraft;
+class Current : public Account
+{
+public:
+	int overdraft;
 
-		void deposit();
+	void deposit();
 
-		void toString();
+	void toString();
 
-		void withdraw();
-	};
+	void withdraw();
+};
 
-	class Savings : public Account, public InterestEarning
-	{
-	protected:
-		int interestRate;
-		bool isa;
+class Savings : public Account, public InterestEarning
+{
+protected:
+	int interestRate;
+	bool isa;
 
-	public:
-		void setInterestRate(int ir);  //Setting balance
+public:
+	void setInterestRate(int ir);  //Setting balance
 
-		int getInterestRate();    //Getting balance
+	int getInterestRate();    //Getting balance
 
-		void setIsa(bool i);   //Setting balance
+	void setIsa(bool i);   //Setting balance
 
-		int getIsa();   //Getting balance
+	int getIsa();   //Getting balance
 
-		void computeInterest();
+	void computeInterest();
 
-		void deposit();
+	void deposit();
 
-		void toString();
+	void toString();
 
-		void withdraw();
-	};
-}
+	void withdraw();
+};
+
 #endif
 

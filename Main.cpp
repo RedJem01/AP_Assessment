@@ -3,8 +3,8 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include "Account.cpp"
-#include "Transaction.cpp"
+#include "Account.h"
+#include "Transaction.h"
 
 int main()
 {
