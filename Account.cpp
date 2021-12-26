@@ -13,9 +13,19 @@ int Account::getBalance()    //Getting balance
 	return balance;
 }
 
+void Account::setType(std::string t)
+{
+	type = t;
+}
+
+std::string Account::getType()
+{
+	return type;
+}
+
 void Account::setHistory(std::vector<Transaction> h)  //Setting history
 {
-	history = h;
+	history.emplace_back(h);
 }
 std::vector<Transaction> Account::getHistory()   //Getting history
 {

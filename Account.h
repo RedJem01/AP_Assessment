@@ -7,11 +7,16 @@ class Account
 private:
 	int balance;
 	std::vector<Transaction> history;
+	std::string type;
 
 public:
 	void setBalance(int b);   //Setting balance
 
 	int getBalance();    //Getting balance
+
+	void setType(std::string t);  //Setting type
+
+	std::string getType();  //Getting type
 
 	void setHistory(std::vector<Transaction> h);  //Setting history
 

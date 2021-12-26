@@ -3,14 +3,17 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <ctime>
 #include "Account.h"
 #include "Transaction.h"
+
+
 
 int main()
 {
 	std::vector <std::string> parameters;
 	std::string userCommand;
-	std::vector <Account*> openedAccounts;
+	std::vector <Account> openedAccounts;
 	bool caOpened = false;
 	bool isaOpened = false;
 
@@ -44,52 +47,107 @@ int main()
 		}
 		else if (command.compare("open") == 0)
 		{
-			// allow a user to open an account
 			bool loop = true;
-			while (loop = true)   //Input verification
+
+			//Input verification
+			while (loop = true)   
 			{
 				std::string accountChoice;
 				int input;
 				std::cout << "What kind of account would you like to open? Please input 1 for a current account, 2 for a regular savings acount or 3 for an ISA savings account." << std::endl;
-				std::getline(std::cin, accountChoice);   //User input what kind of account
-				if (accountChoice == "1")   //If current account
+				
+				//User input
+				std::getline(std::cin, accountChoice);  
+
+				//If current account
+				if (accountChoice == "1")   
 				{
 					if (caOpened == true)
 					{
 						std::cout << "A current account already exists. Please choose a different type of account" << std::endl;
-						main();
+						continue;
 					}
-					Account* c = new Current();   //Opening new current account
+					//Opening new current account
+					Account* c = new Current();   
+					c->setType("c");
+
+					//User input
 					std::cout << "How much would you like to open this account with?" << std::endl;
 					std::cin >> input;
-					c->setBalance(input);    //Setting account's balance as whatever is inputted
-					openedAccounts.emplace_back(c);     //Putting the object into the accounts list 
-					caOpened = true;    //An account has been opened so another can't be opened
+					c->setBalance(input); 
+
+					//Making a new transaction object
+					Transaction* t = new Transaction();
+
+					//Finding current date and time
+					time_t now = time(0);
+					char* dt = ctime(&now);
+
+					//Setting attributes
+					t->setDesc("id");
+					t->setTimeStamp(dt);
+					t->setValue(input);
+
+					//Putting object into accounts list
+					openedAccounts.emplace_back(c);  
+
+					//A current account has been opened so another can't be
+					caOpened = true; 
+
+					//Right input so end loop
 					loop = false;
 				}
-				else if (accountChoice == "2")   //If savings account
+				//If savings account
+				else if (accountChoice == "2")   
 				{
-					Savings* s = new Savings();  //Opening new savings account
-					s->setInterestRate(0.85);   //Setting interest rate
-					s->setIsa(false);   //Setting whether or not isa
+					//Open new savings account
+					Savings* s = new Savings();  
+					s->setType("s");
+					s->setInterestRate(0.85);  
+					s->setIsa(false);  
+
+					//User input
 					std::cout << "How much would you like to open this account with?" << std::endl;
 					std::cin >> input;
 					s->setBalance(input);   
+
+					//Making a new transaction object
+					Transaction* t = new Transaction();
+
+					//Finding current date and time
+					time_t now = time(0);
+					char* dt = ctime(&now);
+
+					//Setting attributes
+					t->setDesc("id");
+					t->setTimeStamp(dt);
+					t->setValue(input);
+
+					//Putting object into accounts list
 					openedAccounts.emplace_back(s);
+
+					//Right input so end loop
 					loop = false;
 				}
-				else if (accountChoice == "3")  //If ISA account
+				//If ISA account
+				else if (accountChoice == "3")  
 				{
-					if (isaOpened == true)  //Check if it has been opened before as only 1 can be opened
+					//Check if opened before 
+					if (isaOpened == true)  
 					{
 						std::cout << "An ISA account already exists. Please choose a different type of account" << std::endl;
 						main();
 					}
 					bool loop2 = true;
-					Savings* i = new Savings();   //Opening new ISA account through savings
+
+					//Opening new ISa account through savings
+					Savings* i = new Savings();   
+					i->setType("i");
 					i->setInterestRate(1.15);  
 					i->setIsa(true);
-					while (loop2 = true)  //This is to check the opening balance is over 1000
+
+					//Check opening balance is over £1000
+					while (loop2 = true)  
 					{ 
 						std::cout << "How much would you like to open this account with? The total has to be over £1000" << std::endl;
 						std::cin >> input;
@@ -103,18 +161,79 @@ int main()
 						}
 					}
 					i->setBalance(input);
+
+					//Making a new transaction object
+					Transaction* t = new Transaction();
+
+					//Finding current date and time
+					time_t now = time(0);
+					char* dt = ctime(&now);
+
+					//Setting attributes
+					t->setDesc("id");
+					t->setTimeStamp(dt);
+					t->setValue(input);
+
 					openedAccounts.emplace_back(i);
 					loop = false;
 				}
 				else
 				{
-					std::cout << "Please only input 1,2 or 3." << std::endl;
+					std::cout << "Please only input 1, 2 or 3." << std::endl;
 				}
 			}
 		}
 		else if (command.compare("view") == 0)
 		{
-			// display an account according to an index (starting from 1)
+			//Display an account according to an index (starting from 1)
+			std::cout << "Please provide an index for the account you want to view. If you do not know the index just press enter and all the accounts will come up." << std::endl;
+			std::string viewIndex;
+			std::cin >> viewIndex;
+
+			//If no index is inputted
+			if (viewIndex == "")
+			{
+				//Loop through account list and output all info from each account
+				for (int i = 0; i < openedAccounts.size(); i++)
+				{
+					std::string accountType = openedAccounts[i].getType();
+					if (accountType == "c")
+					{
+						std::cout << "Current account" << std::endl;
+					}
+					else if (accountType == "s")
+					{
+						std::cout << "Savings account" << std::endl;
+					}
+					else
+					{
+						std::cout << "ISA savings account" << std::endl;
+					}
+					std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
+					std::cout << "Transactions:" << std::endl;
+					std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
+
+					//Looping through the transactions of an account and ouput all info from each transaction
+					for (int j = 0; j < ahistory.size(); j++)
+					{
+						std::string transacType = ahistory[j].getDesc();
+						if (transacType == "id")
+						{
+							std::cout << "Initial deposit" << std::endl;
+						}
+						else if (transacType == "d")
+						{
+							std::cout << "Deposit" << std::endl;
+						}
+						else
+						{
+							std::cout << "Withdraw" << std::endl;
+						}
+						std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
+						std::cout << "Value:" + ahistory[j].getValue() << std::endl;
+					}
+				}
+			}
 			// alternatively, display all accounts if no index is provided
 		}
 		else if (command.compare("withdraw") == 0)

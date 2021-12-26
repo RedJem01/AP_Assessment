@@ -7,7 +7,7 @@ class Transaction
 protected:
 	std::string desc;
 	std::string timestamp;
-	std::string value;
+	int value;
 
 public:
 	void setDesc(std::string d);   //Setting desc
@@ -18,9 +18,9 @@ public:
 
 	std::string getTimeStamp();    //Getting timestamp
 
-	void setValue(std::string v);   //Setting value
+	void setValue(int v);   //Setting value
 
-	std::string getValue();    //Getting value
+	int getValue();    //Getting value
 
 	void toString();
 
