@@ -177,6 +177,7 @@ int main()
 					openedAccounts.emplace_back(i);
 					loop = false;
 				}
+				//If not 1, 2 or 3
 				else
 				{
 					std::cout << "Please only input 1, 2 or 3." << std::endl;
@@ -189,52 +190,52 @@ int main()
 			std::cout << "Please provide an index for the account you want to view. If you do not know the index just press enter and all the accounts will come up." << std::endl;
 			std::string viewIndex;
 			std::cin >> viewIndex;
+			int count = 0;
 
-			//If no index is inputted
-			if (viewIndex == "")
+			//looping through account list and finding the index
+
+
+			//Loop through account list and output all info from each account
+			for (int i = 0; i < openedAccounts.size(); i++)
 			{
-				//Loop through account list and output all info from each account
-				for (int i = 0; i < openedAccounts.size(); i++)
+				std::string accountType = openedAccounts[i].getType();
+				if (accountType == "c")
 				{
-					std::string accountType = openedAccounts[i].getType();
-					if (accountType == "c")
+					std::cout << "Current account" << std::endl;
+				}
+				else if (accountType == "s")
+				{
+					std::cout << "Savings account" << std::endl;
+				}
+				else
+				{
+					std::cout << "ISA savings account" << std::endl;
+				}
+				std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
+				std::cout << "Transactions:" << std::endl;
+				std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
+
+				//Looping through the transactions of an account and ouput all info from each transaction
+				for (int j = 0; j < ahistory.size(); j++)
+				{
+					std::string transacType = ahistory[j].getDesc();
+					if (transacType == "id")
 					{
-						std::cout << "Current account" << std::endl;
+						std::cout << "Initial deposit" << std::endl;
 					}
-					else if (accountType == "s")
+					else if (transacType == "d")
 					{
-						std::cout << "Savings account" << std::endl;
+						std::cout << "Deposit" << std::endl;
 					}
 					else
 					{
-						std::cout << "ISA savings account" << std::endl;
+						std::cout << "Withdraw" << std::endl;
 					}
-					std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
-					std::cout << "Transactions:" << std::endl;
-					std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
-
-					//Looping through the transactions of an account and ouput all info from each transaction
-					for (int j = 0; j < ahistory.size(); j++)
-					{
-						std::string transacType = ahistory[j].getDesc();
-						if (transacType == "id")
-						{
-							std::cout << "Initial deposit" << std::endl;
-						}
-						else if (transacType == "d")
-						{
-							std::cout << "Deposit" << std::endl;
-						}
-						else
-						{
-							std::cout << "Withdraw" << std::endl;
-						}
-						std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
-						std::cout << "Value:" + ahistory[j].getValue() << std::endl;
-					}
+					std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
+					std::cout << "Value:" + ahistory[j].getValue() << std::endl;
 				}
 			}
-			// alternatively, display all accounts if no index is provided
+
 		}
 		else if (command.compare("withdraw") == 0)
 		{
