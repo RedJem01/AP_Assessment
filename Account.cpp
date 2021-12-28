@@ -13,6 +13,15 @@ int Account::getBalance()    //Getting balance
 	return balance;
 }
 
+void Account::setHistory(std::vector<Transaction> h)  //Setting history
+{
+	history.emplace_back(h);
+}
+std::vector<Transaction> Account::getHistory()   //Getting history
+{
+	return history;
+}
+
 void Account::setType(std::string t)
 {
 	type = t;
@@ -23,14 +32,16 @@ std::string Account::getType()
 	return type;
 }
 
-void Account::setHistory(std::vector<Transaction> h)  //Setting history
+void Account::setIndex(int i)
 {
-	history.emplace_back(h);
+	index = i;
 }
-std::vector<Transaction> Account::getHistory()   //Getting history
+
+int Account::getIndex()
 {
-	return history;
+	return index;
 }
+
 
 
 

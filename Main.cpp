@@ -16,6 +16,7 @@ int main()
 	std::vector <Account> openedAccounts;
 	bool caOpened = false;
 	bool isaOpened = false;
+	int index = 0;
 
 	std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
 
@@ -69,6 +70,10 @@ int main()
 					}
 					//Opening new current account
 					Account* c = new Current();   
+					//A current account has been opened so another can't be
+					caOpened = true;
+					index += 1;
+					c->setIndex(index);
 					c->setType("c");
 
 					//User input
@@ -91,9 +96,6 @@ int main()
 					//Putting object into accounts list
 					openedAccounts.emplace_back(c);  
 
-					//A current account has been opened so another can't be
-					caOpened = true; 
-
 					//Right input so end loop
 					loop = false;
 				}
@@ -102,6 +104,10 @@ int main()
 				{
 					//Open new savings account
 					Savings* s = new Savings();  
+					
+					//A new account has been opened so index increases by 1
+					index += 1;
+					s->setIndex(index);
 					s->setType("s");
 					s->setInterestRate(0.85);  
 					s->setIsa(false);  
@@ -142,6 +148,11 @@ int main()
 
 					//Opening new ISa account through savings
 					Savings* i = new Savings();   
+					
+					//New account made so one can't be opened again
+					isaOpened = true;
+					index += 1;
+					i->setIndex(index);
 					i->setType("i");
 					i->setInterestRate(1.15);  
 					i->setIsa(true);
@@ -187,59 +198,191 @@ int main()
 		else if (command.compare("view") == 0)
 		{
 			//Display an account according to an index (starting from 1)
-			std::cout << "Please provide an index for the account you want to view. If you do not know the index just press enter and all the accounts will come up." << std::endl;
-			std::string viewIndex;
-			std::cin >> viewIndex;
+			std::cout << "Please provide an index for the account you want to view (Starting from 1). If you do not know the index just press enter and all the accounts will come up." << std::endl;
+			int ViewIndex;
+			std::cin >> ViewIndex;
+			int viewIndex = ViewIndex - 1;
 			int count = 0;
 
 			//looping through account list and finding the index
-
-
-			//Loop through account list and output all info from each account
 			for (int i = 0; i < openedAccounts.size(); i++)
 			{
-				std::string accountType = openedAccounts[i].getType();
-				if (accountType == "c")
+				if (openedAccounts[i].getIndex() == viewIndex)
 				{
-					std::cout << "Current account" << std::endl;
-				}
-				else if (accountType == "s")
-				{
-					std::cout << "Savings account" << std::endl;
-				}
-				else
-				{
-					std::cout << "ISA savings account" << std::endl;
-				}
-				std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
-				std::cout << "Transactions:" << std::endl;
-				std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
-
-				//Looping through the transactions of an account and ouput all info from each transaction
-				for (int j = 0; j < ahistory.size(); j++)
-				{
-					std::string transacType = ahistory[j].getDesc();
-					if (transacType == "id")
+					std::string accountType = openedAccounts[i].getType();
+					if (accountType == "c")
 					{
-						std::cout << "Initial deposit" << std::endl;
+						std::cout << "Current account" << std::endl;
 					}
-					else if (transacType == "d")
+					else if (accountType == "s")
 					{
-						std::cout << "Deposit" << std::endl;
+						std::cout << "Savings account" << std::endl;
 					}
 					else
 					{
-						std::cout << "Withdraw" << std::endl;
+						std::cout << "ISA savings account" << std::endl;
 					}
-					std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
-					std::cout << "Value:" + ahistory[j].getValue() << std::endl;
+					std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
+					std::cout << "Transactions:" << std::endl;
+					std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
+
+					//Looping through the transactions of an account and output all info from each transaction
+					for (int j = 0; j < ahistory.size(); j++)
+					{
+						std::string transacType = ahistory[j].getDesc();
+						if (transacType == "id")
+						{
+							std::cout << "Initial deposit" << std::endl;
+						}
+						else if (transacType == "d")
+						{
+							std::cout << "Deposit" << std::endl;
+						}
+						else
+						{
+							std::cout << "Withdraw" << std::endl;
+						}
+						std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
+						std::cout << "Value:" + ahistory[j].getValue() << std::endl;
+					}
+				}
+				else
+				{
+					count += 1;
 				}
 			}
 
+			//If the input was not an index that exists then display all of the accounts
+			if (count = openedAccounts.size())
+			{
+				//Loop through account list and output all info from each account
+				for (int i = 0; i < openedAccounts.size(); i++)
+				{
+					std::string accountType = openedAccounts[i].getType();
+					if (accountType == "c")
+					{
+						std::cout << "Current account" << std::endl;
+					}
+					else if (accountType == "s")
+					{
+						std::cout << "Savings account" << std::endl;
+					}
+					else
+					{
+						std::cout << "ISA savings account" << std::endl;
+					}
+					std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
+					std::cout << "Transactions:" << std::endl;
+					std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
+
+					//Looping through the transactions of an account and ouput all info from each transaction
+					for (int j = 0; j < ahistory.size(); j++)
+					{
+						std::string transacType = ahistory[j].getDesc();
+						if (transacType == "id")
+						{
+							std::cout << "Initial deposit" << std::endl;
+						}
+						else if (transacType == "d")
+						{
+							std::cout << "Deposit" << std::endl;
+						}
+						else
+						{
+							std::cout << "Withdraw" << std::endl;
+						}
+						std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
+						std::cout << "Value:" + ahistory[j].getValue() << std::endl;
+					}
+				}
+			}
 		}
 		else if (command.compare("withdraw") == 0)
 		{
-			// allow user to withdraw funds from an account
+			//Allow user to withdraw funds from an account
+			bool loop = true;
+			int count = 0;
+			int place;
+
+			//Input verification 
+			while (loop == true)
+			{
+				//Inputting the account index
+				std::cout << "Please input the index for the account you want to withdraw from (Starting from 1)." << std::endl;
+				int WithIndex;
+				std::cin >> WithIndex;
+				int withIndex = WithIndex - 1;
+
+				//Finding if the account index is in the list
+				for (int i = 0; i < openedAccounts.size(); i++)
+				{
+					//If it is in the list
+					if (withIndex == openedAccounts[i].getIndex())
+					{
+						//Save the position and end loop
+						place = i;
+						loop = false;
+					}
+					else
+					{
+						count += 1;
+					}
+				}
+
+				//If gone through list and no matching index
+				if (count == openedAccounts.size())
+				{
+					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+				}
+			}
+			bool loop2 = true;
+
+			//Second input verification 
+			while (loop2 == true) 
+			{
+				//Inputting amount to withdraw
+				std::cout << "Please input the amount you want to withdraw." << std::endl;
+				int amount;
+				std::cin >> amount;
+
+				//If the account is a current account
+				if (openedAccounts[place].getType() == "c")
+				{
+					//If the amount to withdraw is more than balance and overdraft
+					if ((openedAccounts[place].getBalance() + 500) < amount)
+					{
+						std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+					}
+					//If the amount is less than the balance
+					else
+					{
+						//Minus the amount from the balance
+						openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
+
+						//End loop
+						loop = false;
+					}
+				}
+
+				//If account is savings or ISA
+				else
+				{
+					//If the amount is more than the balance
+					if (openedAccounts[place].getBalance() < amount)
+					{
+						std::cout << "The amount you want to withdraw is more than the amount in your account. Please choose  smaller amount." << std::endl;
+					}
+					//If the amount is less than the balance
+					else
+					{
+						//Minus the amount from the balance
+						openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
+
+						//End loop
+						loop = false;
+					}
+				}
+			}
 		}
 		else if (command.compare("deposit") == 0)
 		{

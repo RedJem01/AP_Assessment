@@ -8,19 +8,24 @@ private:
 	int balance;
 	std::vector<Transaction> history;
 	std::string type;
+	int index;
 
 public:
 	void setBalance(int b);   //Setting balance
 
 	int getBalance();    //Getting balance
 
+	void setHistory(std::vector<Transaction> h);  //Setting history
+
+	std::vector<Transaction> getHistory();   //Getting history
+
 	void setType(std::string t);  //Setting type
 
 	std::string getType();  //Getting type
 
-	void setHistory(std::vector<Transaction> h);  //Setting history
+	void setIndex(int i); //Setting index
 
-	std::vector<Transaction> getHistory();   //Getting history
+	int getIndex(); // Getting index
 
 
 	void virtual deposit() = 0;
