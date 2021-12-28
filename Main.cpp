@@ -328,7 +328,6 @@ int main()
 						count += 1;
 					}
 				}
-
 				//If gone through list and no matching index
 				if (count == openedAccounts.size())
 				{
@@ -336,52 +335,15 @@ int main()
 				}
 			}
 			bool loop2 = true;
-
-			//Second input verification 
-			while (loop2 == true) 
+			if (openedAccounts[place].getType() == "c")
 			{
-				//Inputting amount to withdraw
-				std::cout << "Please input the amount you want to withdraw." << std::endl;
-				int amount;
-				std::cin >> amount;
-
-				//If the account is a current account
-				if (openedAccounts[place].getType() == "c")
-				{
-					//If the amount to withdraw is more than balance and overdraft
-					if ((openedAccounts[place].getBalance() + 500) < amount)
-					{
-						std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
-					}
-					//If the amount is less than the balance
-					else
-					{
-						//Minus the amount from the balance
-						openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
-
-						//End loop
-						loop = false;
-					}
-				}
-
-				//If account is savings or ISA
-				else
-				{
-					//If the amount is more than the balance
-					if (openedAccounts[place].getBalance() < amount)
-					{
-						std::cout << "The amount you want to withdraw is more than the amount in your account. Please choose  smaller amount." << std::endl;
-					}
-					//If the amount is less than the balance
-					else
-					{
-						//Minus the amount from the balance
-						openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
-
-						//End loop
-						loop = false;
-					}
-				}
+				Current* ca = new Current();
+				ca->withdraw(openedAccounts, place);
+			}
+			else
+			{
+				Savings* sa = new Savings();
+				sa->withdraw(openedAccounts, place);
 			}
 		}
 		else if (command.compare("deposit") == 0)

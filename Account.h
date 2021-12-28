@@ -32,7 +32,7 @@ public:
 
 	void toString();
 
-	void virtual withdraw() = 0;
+	void virtual withdraw(std::vector <Account> openedAccounts, int place) = 0;
 };
 
 class InterestEarning
@@ -50,7 +50,7 @@ public:
 
 	void toString();
 
-	void withdraw();
+	void withdraw(std::vector <Account> openedAccounts, int place);
 };
 
 class Savings : public Account, public InterestEarning
@@ -74,7 +74,7 @@ public:
 
 	void toString();
 
-	void withdraw();
+	void withdraw(std::vector <Account> openedAccounts, int place);
 };
 
 #endif
