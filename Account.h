@@ -46,7 +46,7 @@ class Current : public Account
 public:
 	int overdraft;
 
-	void deposit();
+	void deposit(std::vector <Account> openedAccounts, int place);
 
 	void toString();
 
@@ -70,7 +70,7 @@ public:
 
 	void computeInterest();
 
-	void deposit();
+	void deposit(std::vector <Account> openedAccounts, int place);
 
 	void toString();
 

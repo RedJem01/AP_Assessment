@@ -334,7 +334,6 @@ int main()
 					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
 				}
 			}
-			bool loop2 = true;
 			if (openedAccounts[place].getType() == "c")
 			{
 				Current* ca = new Current();
@@ -348,7 +347,51 @@ int main()
 		}
 		else if (command.compare("deposit") == 0)
 		{
-			// allow user to deposit funds into an account
+			//Allow user to deposit funds into an account
+			int place;
+			int count = 0;
+			bool loop = true;
+			//Input verification 
+			while (loop == true)
+			{
+				//Inputting the account index
+				std::cout << "Please input the index for the account you want to withdraw from (Starting from 1)." << std::endl;
+				int WithIndex;
+				std::cin >> WithIndex;
+				int withIndex = WithIndex - 1;
+
+				//Finding if the account index is in the list
+				for (int i = 0; i < openedAccounts.size(); i++)
+				{
+					//If it is in the list
+					if (withIndex == openedAccounts[i].getIndex())
+					{
+						//Save the position and end loop
+						place = i;
+						loop = false;
+					}
+					else
+					{
+						count += 1;
+					}
+				}
+				//If gone through list and no matching index
+				if (count == openedAccounts.size())
+				{
+					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+				}
+			}
+
+			if (openedAccounts[place].getType() == "c")
+			{
+				Current* ca = new Current();
+				ca->deposit(openedAccounts, place);
+			}
+			else
+			{
+				Savings* sa = new Savings();
+				sa->deposit(openedAccounts, place);
+			}
 		}
 		else if (command.compare("transfer") == 0)
 		{

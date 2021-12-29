@@ -53,9 +53,27 @@ void Account::toString()
 
 
 
-void Current::deposit()
+void Current::deposit(std::vector <Account> openedAccounts, int place)
 {
-	std::cout << "1" << std::endl;
+	bool loop = true;
+	//input verification
+	while (loop == true)
+	{
+		//Inputting amount to deposit
+		std::cout << "Please input the amount you would like to deposit." << std::endl;
+		int amount;
+		std::cin >> amount;
+		if (amount > 0)
+		{
+			//Adding the amount to the account balance
+			openedAccounts[place].setBalance(openedAccounts[place].getBalance() + amount);
+			loop = false;
+		}
+		else
+		{
+			std::cout << "Please input an amount above 0." << std::endl;
+		}
+	}
 }
 
 void Current::toString()
@@ -65,29 +83,43 @@ void Current::toString()
 
 void Current::withdraw(std::vector <Account> openedAccounts, int place)
 {
+	bool loop = true;
 	bool loop2 = true;
 
 	//input verification 
-	while (loop2 == true)
+	while (loop == true)
 	{
+
 		//Inputting amount to withdraw
 		std::cout << "Please input the amount you want to withdraw." << std::endl;
 		int amount;
 		std::cin >> amount;
 
-		//If the amount to withdraw is more than balance and overdraft
-		if ((openedAccounts[place].getBalance() + 500) < amount)
+		//If amount is positive
+		if (amount < 0)
 		{
-			std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+			std::cout << "Please input a positive number." << std::endl;
+			continue;
 		}
-		//If the amount is less than the balance
+		//If amount is negative
 		else
 		{
-			//Minus the amount from the balance
-			openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
+			//If amount is more than balance and overdraft
+			if ((openedAccounts[place].getBalance() + 500) < amount)
+			{
+				std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+				continue;
+			}
+			//If amount is less than balance
+			else
+			{
+				//Minus the amount from the balance
+				openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
 
-			//End loop
-			loop2 = false;
+				//End loops
+				loop = false;
+				loop2 = false;
+			}
 		}
 	}
 }
@@ -116,9 +148,27 @@ void Savings::computeInterest()
 	std::cout << "1" << std::endl;
 }
 
-void Savings::deposit()
+void Savings::deposit(std::vector <Account> openedAccounts, int place)
 {
-	std::cout << "1" << std::endl;
+	bool loop = true;
+	//input verification
+	while (loop == true)
+	{
+		//Inputting amount to deposit
+		std::cout << "Please input the amount you would like to deposit." << std::endl;
+		int amount;
+		std::cin >> amount;
+		if (amount > 0)
+		{
+			//Adding the amount to the account balance
+			openedAccounts[place].setBalance(openedAccounts[place].getBalance() + amount);
+			loop = false;
+		}
+		else
+		{
+			std::cout << "Please input an amount above 0." << std::endl;
+		}
+	}
 }
 
 void Savings::toString()
@@ -128,29 +178,43 @@ void Savings::toString()
 
 void Savings::withdraw(std::vector <Account> openedAccounts, int place)
 {
+	bool loop = true;
 	bool loop2 = true;
 
-	//Second input verification 
-	while (loop2 == true)
+	//input verification 
+	while (loop == true)
 	{
+
 		//Inputting amount to withdraw
 		std::cout << "Please input the amount you want to withdraw." << std::endl;
 		int amount;
 		std::cin >> amount;
 
-		//If the amount is more than the balance
-		if (openedAccounts[place].getBalance() < amount)
+		//If amount is positive
+		if (amount < 0)
 		{
-			std::cout << "The amount you want to withdraw is more than the amount in your account. Please choose  smaller amount." << std::endl;
+			std::cout << "Please input a positive number." << std::endl;
+			continue;
 		}
-		//If the amount is less than the balance
+		//If amount is negative
 		else
 		{
-			//Minus the amount from the balance
-			openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
+			//If amount is more than balance 
+			if (openedAccounts[place].getBalance() < amount)
+			{
+				std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+				continue;
+			}
+			//If amount is less than balance
+			else
+			{
+				//Minus the amount from the balance
+				openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
 
-			//End loop
-			loop2 = false;
+				//End loops
+				loop = false;
+				loop2 = false;
+			}
 		}
 	}
 }
