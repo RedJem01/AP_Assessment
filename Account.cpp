@@ -1,23 +1,25 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
+#include <ctime>
 #include "Account.h"
 #include "Transaction.h"
 
 
-void Account::setBalance(int b)   //Setting balance
+void Account::setBalance(double b)   //Setting balance
 {
 	balance = b;
 }
-int Account::getBalance()    //Getting balance
+double Account::getBalance()    //Getting balance
 {
 	return balance;
 }
 
-void Account::setHistory(std::vector<Transaction> h)  //Setting history
+void Account::setHistory(Transaction* h)  //Setting history
 {
 	history.emplace_back(h);
 }
-std::vector<Transaction> Account::getHistory()   //Getting history
+std::vector<Transaction*> Account::getHistory()   //Getting history
 {
 	return history;
 }
@@ -42,9 +44,6 @@ int Account::getIndex()
 	return index;
 }
 
-
-
-
 void Account::toString()
 {
 	std::cout << "1" << std::endl;
@@ -53,9 +52,14 @@ void Account::toString()
 
 
 
-void Current::deposit(std::vector <Account> openedAccounts, int place)
+void Current::deposit(std::vector <Account*> openedAccounts, int place)
 {
 	bool loop = true;
+
+	//Finding current date and time
+	time_t now = time(0);
+	char* dt = ctime(&now);
+
 	//input verification
 	while (loop == true)
 	{
@@ -66,7 +70,16 @@ void Current::deposit(std::vector <Account> openedAccounts, int place)
 		if (amount > 0)
 		{
 			//Adding the amount to the account balance
-			openedAccounts[place].setBalance(openedAccounts[place].getBalance() + amount);
+			openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() + amount);
+
+			//Creating a transaction object to add to history
+			Transaction* t = new Transaction();
+			t->setDesc("d");
+			t->setTimeStamp(dt);
+			t->setValue(amount);
+			openedAccounts[place]->setHistory(t);
+
+			//end loop
 			loop = false;
 		}
 		else
@@ -81,10 +94,15 @@ void Current::toString()
 	std::cout << "1" << std::endl;
 }
 
-void Current::withdraw(std::vector <Account> openedAccounts, int place)
+void Current::withdraw(std::vector <Account*> openedAccounts, int place)
 {
 	bool loop = true;
 	bool loop2 = true;
+
+
+	//Finding current date and time
+	time_t now = time(0);
+	char* dt = ctime(&now);
 
 	//input verification 
 	while (loop == true)
@@ -105,7 +123,7 @@ void Current::withdraw(std::vector <Account> openedAccounts, int place)
 		else
 		{
 			//If amount is more than balance and overdraft
-			if ((openedAccounts[place].getBalance() + 500) < amount)
+			if ((openedAccounts[place]->getBalance() + 500) < amount)
 			{
 				std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
 				continue;
@@ -114,7 +132,14 @@ void Current::withdraw(std::vector <Account> openedAccounts, int place)
 			else
 			{
 				//Minus the amount from the balance
-				openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
+				openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() - amount);
+
+				//Creating a transaction object to add to history
+				Transaction* t = new Transaction();
+				t->setDesc("d");
+				t->setTimeStamp(dt);
+				t->setValue(amount);
+				openedAccounts[place]->setHistory(t);
 
 				//End loops
 				loop = false;
@@ -148,20 +173,34 @@ void Savings::computeInterest()
 	std::cout << "1" << std::endl;
 }
 
-void Savings::deposit(std::vector <Account> openedAccounts, int place)
+void Savings::deposit(std::vector <Account*> openedAccounts, int place)
 {
 	bool loop = true;
+
+
+	//Finding current date and time
+	time_t now = time(0);
+	char* dt = ctime(&now);
+
 	//input verification
 	while (loop == true)
 	{
 		//Inputting amount to deposit
 		std::cout << "Please input the amount you would like to deposit." << std::endl;
-		int amount;
+		double amount;
 		std::cin >> amount;
 		if (amount > 0)
 		{
 			//Adding the amount to the account balance
-			openedAccounts[place].setBalance(openedAccounts[place].getBalance() + amount);
+			openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() + amount);
+
+			//Creating a transaction object to add to history
+			Transaction* t = new Transaction();
+			t->setDesc("d");
+			t->setTimeStamp(dt);
+			t->setValue(amount);
+			openedAccounts[place]->setHistory(t);
+
 			loop = false;
 		}
 		else
@@ -176,10 +215,14 @@ void Savings::toString()
 	std::cout << "1" << std::endl;
 }
 
-void Savings::withdraw(std::vector <Account> openedAccounts, int place)
+void Savings::withdraw(std::vector <Account*> openedAccounts, int place)
 {
 	bool loop = true;
 	bool loop2 = true;
+
+	//Finding current date and time
+	time_t now = time(0);
+	char* dt = ctime(&now);
 
 	//input verification 
 	while (loop == true)
@@ -200,7 +243,7 @@ void Savings::withdraw(std::vector <Account> openedAccounts, int place)
 		else
 		{
 			//If amount is more than balance 
-			if (openedAccounts[place].getBalance() < amount)
+			if (openedAccounts[place]->getBalance() < amount)
 			{
 				std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
 				continue;
@@ -209,7 +252,15 @@ void Savings::withdraw(std::vector <Account> openedAccounts, int place)
 			else
 			{
 				//Minus the amount from the balance
-				openedAccounts[place].setBalance(openedAccounts[place].getBalance() - amount);
+				openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() - amount);
+
+				//Creating a transaction object to add to history
+				Transaction* t = new Transaction();
+				t->setDesc("d");
+				t->setTimeStamp(dt);
+				t->setValue(amount);
+				openedAccounts[place]->setHistory(t);
+
 
 				//End loops
 				loop = false;

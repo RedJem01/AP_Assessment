@@ -21,11 +21,11 @@ std::string Transaction::getTimeStamp()    //Getting timestamp
 	return timestamp;
 }
 
-void Transaction::setValue(int v)   //Setting value
+void Transaction::setValue(double v)   //Setting value
 {
 	value = v;
 }
-int Transaction::getValue()    //Getting value
+double Transaction::getValue()    //Getting value
 {
 	return value;
 }

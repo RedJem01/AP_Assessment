@@ -13,7 +13,7 @@ int main()
 {
 	std::vector <std::string> parameters;
 	std::string userCommand;
-	std::vector <Account> openedAccounts;
+	std::vector <Account*> openedAccounts;
 	bool caOpened = false;
 	bool isaOpened = false;
 	int index = 0;
@@ -50,11 +50,15 @@ int main()
 		{
 			bool loop = true;
 
+			//Finding current date and time
+			time_t now = time(0);
+			char* dt = ctime(&now);
+
 			//Input verification
 			while (loop = true)   
 			{
+				double input;
 				std::string accountChoice;
-				int input;
 				std::cout << "What kind of account would you like to open? Please input 1 for a current account, 2 for a regular savings acount or 3 for an ISA savings account." << std::endl;
 				
 				//User input
@@ -84,14 +88,12 @@ int main()
 					//Making a new transaction object
 					Transaction* t = new Transaction();
 
-					//Finding current date and time
-					time_t now = time(0);
-					char* dt = ctime(&now);
-
 					//Setting attributes
 					t->setDesc("id");
 					t->setTimeStamp(dt);
 					t->setValue(input);
+
+					c->setHistory(t);
 
 					//Putting object into accounts list
 					openedAccounts.emplace_back(c);  
@@ -120,14 +122,12 @@ int main()
 					//Making a new transaction object
 					Transaction* t = new Transaction();
 
-					//Finding current date and time
-					time_t now = time(0);
-					char* dt = ctime(&now);
-
 					//Setting attributes
 					t->setDesc("id");
 					t->setTimeStamp(dt);
 					t->setValue(input);
+
+					s->setHistory(t);
 
 					//Putting object into accounts list
 					openedAccounts.emplace_back(s);
@@ -176,14 +176,12 @@ int main()
 					//Making a new transaction object
 					Transaction* t = new Transaction();
 
-					//Finding current date and time
-					time_t now = time(0);
-					char* dt = ctime(&now);
-
 					//Setting attributes
 					t->setDesc("id");
 					t->setTimeStamp(dt);
 					t->setValue(input);
+
+					i->setHistory(t);
 
 					openedAccounts.emplace_back(i);
 					loop = false;
@@ -207,9 +205,9 @@ int main()
 			//looping through account list and finding the index
 			for (int i = 0; i < openedAccounts.size(); i++)
 			{
-				if (openedAccounts[i].getIndex() == viewIndex)
+				if (openedAccounts[i]->getIndex() == viewIndex)
 				{
-					std::string accountType = openedAccounts[i].getType();
+					std::string accountType = openedAccounts[i]->getType();
 					if (accountType == "c")
 					{
 						std::cout << "Current account" << std::endl;
@@ -222,14 +220,14 @@ int main()
 					{
 						std::cout << "ISA savings account" << std::endl;
 					}
-					std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
+					std::cout << "Balance of account:" << openedAccounts[i]->getBalance() << std::endl;
 					std::cout << "Transactions:" << std::endl;
-					std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
+					std::vector<Transaction*> ahistory = openedAccounts[i]->getHistory();
 
 					//Looping through the transactions of an account and output all info from each transaction
 					for (int j = 0; j < ahistory.size(); j++)
 					{
-						std::string transacType = ahistory[j].getDesc();
+						std::string transacType = ahistory[j]->getDesc();
 						if (transacType == "id")
 						{
 							std::cout << "Initial deposit" << std::endl;
@@ -242,8 +240,8 @@ int main()
 						{
 							std::cout << "Withdraw" << std::endl;
 						}
-						std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
-						std::cout << "Value:" + ahistory[j].getValue() << std::endl;
+						std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
+						std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
 					}
 				}
 				else
@@ -258,7 +256,7 @@ int main()
 				//Loop through account list and output all info from each account
 				for (int i = 0; i < openedAccounts.size(); i++)
 				{
-					std::string accountType = openedAccounts[i].getType();
+					std::string accountType = openedAccounts[i]->getType();
 					if (accountType == "c")
 					{
 						std::cout << "Current account" << std::endl;
@@ -271,14 +269,14 @@ int main()
 					{
 						std::cout << "ISA savings account" << std::endl;
 					}
-					std::cout << "Balance of account:" + openedAccounts[i].getBalance() << std::endl;
+					std::cout << "Balance of account:" << openedAccounts[i]->getBalance() << std::endl;
 					std::cout << "Transactions:" << std::endl;
-					std::vector<Transaction> ahistory = openedAccounts[i].getHistory();
+					std::vector<Transaction*> ahistory = openedAccounts[i]->getHistory();
 
 					//Looping through the transactions of an account and ouput all info from each transaction
 					for (int j = 0; j < ahistory.size(); j++)
 					{
-						std::string transacType = ahistory[j].getDesc();
+						std::string transacType = ahistory[j]->getDesc();
 						if (transacType == "id")
 						{
 							std::cout << "Initial deposit" << std::endl;
@@ -289,10 +287,10 @@ int main()
 						}
 						else
 						{
-							std::cout << "Withdraw" << std::endl;
+							std::cout << "Withdrawal" << std::endl;
 						}
-						std::cout << "Time:" + ahistory[j].getTimeStamp() << std::endl;
-						std::cout << "Value:" + ahistory[j].getValue() << std::endl;
+						std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
+						std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
 					}
 				}
 			}
@@ -317,7 +315,7 @@ int main()
 				for (int i = 0; i < openedAccounts.size(); i++)
 				{
 					//If it is in the list
-					if (withIndex == openedAccounts[i].getIndex())
+					if (withIndex == openedAccounts[i]->getIndex())
 					{
 						//Save the position and end loop
 						place = i;
@@ -334,7 +332,7 @@ int main()
 					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
 				}
 			}
-			if (openedAccounts[place].getType() == "c")
+			if (openedAccounts[place]->getType() == "c")
 			{
 				Current* ca = new Current();
 				ca->withdraw(openedAccounts, place);
@@ -364,7 +362,7 @@ int main()
 				for (int i = 0; i < openedAccounts.size(); i++)
 				{
 					//If it is in the list
-					if (withIndex == openedAccounts[i].getIndex())
+					if (withIndex == openedAccounts[i]->getIndex())
 					{
 						//Save the position and end loop
 						place = i;
@@ -382,7 +380,7 @@ int main()
 				}
 			}
 
-			if (openedAccounts[place].getType() == "c")
+			if (openedAccounts[place]->getType() == "c")
 			{
 				Current* ca = new Current();
 				ca->deposit(openedAccounts, place);
