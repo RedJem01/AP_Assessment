@@ -28,11 +28,11 @@ public:
 	int getIndex(); // Getting index
 
 
-	void virtual deposit(std::vector <Account*> openedAccounts, int place) = 0;
+	void virtual deposit(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 
 	void toString();
 
-	void virtual withdraw(std::vector <Account*> openedAccounts, int place) = 0;
+	void virtual withdraw(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 };
 
 class InterestEarning
@@ -46,11 +46,11 @@ class Current : public Account
 public:
 	int overdraft;
 
-	void deposit(std::vector <Account*> openedAccounts, int place);
+	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
 
 	void toString();
 
-	void withdraw(std::vector <Account*> openedAccounts, int place);
+	void withdraw(std::vector <Account*> openedAccounts, int place, double amount);
 };
 
 class Savings : public Account, public InterestEarning
@@ -70,11 +70,11 @@ public:
 
 	void computeInterest();
 
-	void deposit(std::vector <Account*> openedAccounts, int place);
+	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
 
 	void toString();
 
-	void withdraw(std::vector <Account*> openedAccounts, int place);
+	void withdraw(std::vector <Account*> openedAccounts, int place, double amount);
 };
 
 #endif
