@@ -14,7 +14,7 @@ int main()
 	std::vector <std::string> parameters;
 	std::string userCommand;
 	std::vector <Account*> openedAccounts;
-	int index = 0;
+	int index = -1;
 
 	std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
 
@@ -100,7 +100,7 @@ int main()
 					//Putting object into accounts list
 					openedAccounts.emplace_back(c);
 
-					std::cout << "A current account has been opened with a balance of £" <<parameters[2] << std::endl;
+					std::cout << "A current account has been opened with a balance of " <<parameters[2] << " pounds." << std::endl;
 				}
 				//If savings account
 				else if (parameters[1] == "2")
@@ -144,7 +144,7 @@ int main()
 					//Putting object into accounts list
 					openedAccounts.emplace_back(s);
 
-					std::cout << "A savings account has been opened with an initial deposit of £" << parameters[2] << std::endl;
+					std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
 				//If ISA account
 				else if (parameters[1] == "3")
@@ -174,7 +174,7 @@ int main()
 
 					if (stoi(parameters[2]) < 1000)
 					{
-						std::cout << "That is not over £1000. Please input an amount over £1000." << std::endl;
+						std::cout << "That is not over 1000 pounds. Please input an amount over 1000 pounds." << std::endl;
 						continue;
 					}
 
@@ -199,7 +199,7 @@ int main()
 					//Adding the savings object to the vector
 					openedAccounts.emplace_back(i);
 
-					std::cout << "An ISA savings account has been opened with an initial deposit of £" << parameters[2] << std::endl;
+					std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
 				//If not 1, 2 or 3
 				else
@@ -281,8 +281,8 @@ int main()
 						{
 							std::cout << "ISA savings account" << std::endl;
 						}
-						std::cout << "Balance of account:" << openedAccounts[i]->getBalance() << std::endl;
-						std::cout << "Transactions:" << std::endl;
+						std::cout << "Balance of account: " << openedAccounts[i]->getBalance() << " pounds" << std::endl;
+						std::cout << "Transactions: " << std::endl;
 						std::vector<Transaction*> ahistory = openedAccounts[i]->getHistory();
 
 						//Looping through the transactions of an account and ouput all info from each transaction
@@ -302,7 +302,7 @@ int main()
 								std::cout << "Withdrawal" << std::endl;
 							}
 							std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
-							std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
+							std::cout << "Value: " << ahistory[j]->getValue() << " pounds" << std::endl;
 						}
 					}
 				}
@@ -341,7 +341,7 @@ int main()
 								else
 								{
 									c->withdraw(openedAccounts, i, stoi(parameters[2]));
-									std::cout << "£" << parameters[2] << "has been withdrawn from account " << parameters[1] << std::endl;
+									std::cout << parameters[2] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 								}
 							}
 							else
@@ -357,7 +357,7 @@ int main()
 								else
 								{
 									sa->withdraw(openedAccounts, i, stoi(parameters[2]));
-									std::cout << "£" << parameters[2] << "has been withdrawn from account " << parameters[1] << std::endl;
+									std::cout << parameters[2] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 								}
 							}
 						}
@@ -391,13 +391,13 @@ int main()
 							{
 								Current* ca = new Current();
 								ca->deposit(openedAccounts, i, stoi(parameters[2]));
-								std::cout << "£" << parameters[2] << "has been deposited into account " << parameters[1] << std::endl;
+								std::cout << parameters[2] << " pounds has been deposited into account " << parameters[1] << std::endl;
 							}
 							else
 							{
 								Savings* sa = new Savings();
 								sa->deposit(openedAccounts, i, stoi(parameters[2]));
-								std::cout << "£" << parameters[2] << "has been deposited into account " << parameters[1] << std::endl;
+								std::cout << parameters[2] << " pounds has been deposited into account " << parameters[1] << std::endl;
 							}
 						}
 						else
@@ -423,6 +423,7 @@ int main()
 				int count2 = 0;
 
 				int index = stoi(parameters[1]) - 1;
+				int index2 = stoi(parameters[2]) - 1;
 
 				//Finding if the account index is in the list
 				for (int i = 0; i < openedAccounts.size(); i++)
@@ -430,13 +431,11 @@ int main()
 					//If it is in the list
 					if (index == openedAccounts[i]->getIndex())
 					{
-						int index2 = stoi(parameters[2]) - 1;
-
 						//Finding if the 2nd account index is in the list
 						for (int j = 0; j < openedAccounts.size(); j++)
 						{
 							//If it is in the list
-							if (index2 == openedAccounts[i]->getIndex())
+							if (index2 == openedAccounts[j]->getIndex())
 							{
 								//If amount is negative or 0
 								if (stoi(parameters[3]) <= 0)
@@ -462,7 +461,7 @@ int main()
 										else
 										{
 											c->withdraw(openedAccounts, i, stoi(parameters[3]));
-											std::cout << "£" << parameters[3] << "has been withdrawn from account " << parameters[1] << std::endl;
+											std::cout << parameters[3] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 										}
 									}
 									//If account type is savings
@@ -479,7 +478,7 @@ int main()
 										else
 										{
 											s->withdraw(openedAccounts, i, stoi(parameters[3]));
-											std::cout << "£" << parameters[3] << "has been withdrawn from account " << parameters[1] << std::endl;
+											std::cout << parameters[3] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 										}
 									}
 
@@ -490,14 +489,14 @@ int main()
 									{
 										Current* c = new Current();
 										c->deposit(openedAccounts, j, stoi(parameters[3]));
-										std::cout << "£" << parameters[3] << "has been deposited into account " << parameters[2] << std::endl;
+										std::cout << parameters[3] << " pounds has been deposited into account " << parameters[2] << std::endl;
 									}
 									//If account type is savings
 									else
 									{
 										Savings* s = new Savings();
 										s->deposit(openedAccounts, j, stoi(parameters[3]));
-										std::cout << "£" << parameters[3] << "has been deposited into account " << parameters[2] << std::endl;
+										std::cout << parameters[3] << " pounds has been deposited into account " << parameters[2] << std::endl;
 									}
 								}
 							}
@@ -555,7 +554,7 @@ int main()
 
 						//Calling the computeInterest function
 						double finalAmount = s->computeInterest(interestRate, openedAccounts[i]->getBalance(), stoi(parameters[2]));
-						std::cout << "Your balance in " << parameters[2] << "years will be " << finalAmount << std::endl;
+						std::cout << "Your balance in " << parameters[2] << " years will be " << finalAmount << " pounds." << std::endl;
 					}
 					else
 					{

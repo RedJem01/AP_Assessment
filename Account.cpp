@@ -55,8 +55,6 @@ void Account::toString()
 
 void Current::deposit(std::vector <Account*> openedAccounts, int place, double amount)
 {
-	bool loop = true;
-
 	//Finding current date and time
 	time_t now = time(0);
 	char* dt = ctime(&now);
@@ -70,9 +68,6 @@ void Current::deposit(std::vector <Account*> openedAccounts, int place, double a
 	t->setTimeStamp(dt);
 	t->setValue(amount);
 	openedAccounts[place]->setHistory(t);
-
-	//end loop
-	loop = false;
 }
 
 void Current::toString()
@@ -82,7 +77,6 @@ void Current::toString()
 
 void Current::withdraw(std::vector <Account*> openedAccounts, int place, double amount)
 {
-	bool loop = true;
 	//Finding current date and time
 	time_t now = time(0);
 	char* dt = ctime(&now);
@@ -96,7 +90,6 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 	t->setTimeStamp(dt);
 	t->setValue(amount);
 	openedAccounts[place]->setHistory(t);
-	loop = false;
 }
 
 

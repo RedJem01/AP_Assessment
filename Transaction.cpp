@@ -12,7 +12,6 @@ std::string Transaction::getDesc()    //Getting desc
 }
 
 void Transaction::setTimeStamp(std::string ts)   //Setting timestamp
-
 {
 	timestamp = ts;
 }
