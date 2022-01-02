@@ -14,7 +14,6 @@ int main()
 	std::vector <std::string> parameters;
 	std::string userCommand;
 	std::vector <Account*> openedAccounts;
-	bool caOpened = false;
 	bool isaOpened = false;
 	int index = 0;
 
@@ -51,10 +50,6 @@ int main()
 			bool loop = true;
 			bool loop2 = true;
 
-			//Finding current date and time
-			time_t now = time(0);
-			char* dt = ctime(&now);
-
 			//Input verification
 			while (loop == true)   
 			{
@@ -68,32 +63,47 @@ int main()
 				//If current account
 				if (accountChoice == "1")   
 				{
-					if (caOpened == true)
+					//Looping through the list of opened accounts
+					for (int i = 0; i < openedAccounts.size(); i++)
 					{
-						std::cout << "A current account already exists. Please choose a different type of account" << std::endl;
-						continue;
+						//If any are current accounts
+						if (openedAccounts[i]->getType() == "c")
+						{
+							std::cout << "A current account already exists." << std::endl;
+							continue;
+						}
 					}
+
 					//Opening new current account
 					Account* c = new Current();   
-					//A current account has been opened so another can't be
-					caOpened = true;
+
+					//Setting index
 					index += 1;
 					c->setIndex(index);
+
+					//Setting type
 					c->setType("c");
 
 					//Input verification
 					while (loop2 = true)
 					{
-						//User input
-						std::cout << "How much would you like to open this account with?" << std::endl;
-						std::cin >> input;
-						if (input < 0)
+						try
 						{
-							std::cout << "Please enter a number above or equal to 0." << std::endl;
+							//User input
+							std::cout << "How much would you like to open this account with?" << std::endl;
+							std::cin >> input;
+							if (input < 0)
+							{
+								std::cout << "Please enter a number above or equal to 0." << std::endl;
+							}
+							else
+							{
+								loop2 = false;
+							}
 						}
-						else
+						catch (std::invalid_argument)
 						{
-							loop2 = false;
+							std::cout << "Please enter a number with 0-2 decimal spaces." << std::endl;
 						}
 					}
 
@@ -102,6 +112,10 @@ int main()
 
 					//Making a new transaction object
 					Transaction* t = new Transaction();
+
+					//Finding current date and time
+					time_t now = time(0);
+					char* dt = ctime(&now);
 
 					//Setting attributes for transaction
 					t->setDesc("id");
@@ -135,16 +149,23 @@ int main()
 					//Input verification
 					while (loop2 = true)
 					{
-						//User input
-						std::cout << "How much would you like to open this account with?" << std::endl;
-						std::cin >> input;
-						if (input < 0)
+						try
 						{
-							std::cout << "Please enter a number above or equal to 0." << std::endl;
+							//User input
+							std::cout << "How much would you like to open this account with?" << std::endl;
+							std::cin >> input;
+							if (input < 0)
+							{
+								std::cout << "Please enter a number above or equal to 0." << std::endl;
+							}
+							else
+							{
+								loop2 = false;
+							}
 						}
-						else
+						catch (std::invalid_argument)
 						{
-							loop2 = false;
+							std::cout << "Please enter a number with 0-2 decimal spaces." << std::endl;
 						}
 					}
 
@@ -153,6 +174,10 @@ int main()
 
 					//Making a new transaction object
 					Transaction* t = new Transaction();
+
+					//Finding current date and time
+					time_t now = time(0);
+					char* dt = ctime(&now);
 
 					//Setting attributes
 					t->setDesc("id");
@@ -170,36 +195,48 @@ int main()
 				//If ISA account
 				else if (accountChoice == "3")  
 				{
-					//Check if opened before 
-					if (isaOpened == true)  
+					//Looping through the list of opened accounts
+					for (int i = 0; i < openedAccounts.size(); i++)
 					{
-						std::cout << "An ISA account already exists. Please choose a different type of account" << std::endl;
-						main();
+						//If any are current accounts
+						if (openedAccounts[i]->getType() == "i")
+						{
+							std::cout << "An ISA account already exists." << std::endl;
+							continue;
+						}
 					}
 
 					//Opening new ISa account through savings
 					Savings* i = new Savings();   
 					
-					//New account made so one can't be opened again
-					isaOpened = true;
+					//Seting index
 					index += 1;
 					i->setIndex(index);
 					i->setType("i");
-					i->setInterestRate(1.15);  
+
+					i->setInterestRate(1.15); 
+
 					i->setIsa(true);
 
 					//Check opening balance is over £1000
 					while (loop2 = true)  
 					{ 
-						std::cout << "How much would you like to open this account with? The total has to be over £1000" << std::endl;
-						std::cin >> input;
-						if (input < 1000)
+						try
 						{
-							std::cout << "That is not over £1000. Please input an amount over £1000." << std::endl;
+							std::cout << "How much would you like to open this account with? The total has to be over £1000" << std::endl;
+							std::cin >> input;
+							if (input < 1000)
+							{
+								std::cout << "That is not over £1000. Please input an amount over £1000." << std::endl;
+							}
+							else
+							{
+								loop2 = false;
+							}
 						}
-						else
+						catch (std::invalid_argument)
 						{
-							loop2 = false;
+							std::cout << "Please input a number with 0-2 decimal spaces." << std::endl;
 						}
 					}
 
@@ -208,6 +245,10 @@ int main()
 
 					//Making a new transaction object
 					Transaction* t = new Transaction();
+
+					//Finding current date and time
+					time_t now = time(0);
+					char* dt = ctime(&now);
 
 					//Setting attributes
 					t->setDesc("id");
@@ -228,103 +269,114 @@ int main()
 		}
 		else if (command.compare("view") == 0)
 		{
-			//Display an account according to an index (starting from 1)
-			std::cout << "Please provide an index for the account you want to view (Starting from 1). If you do not know the index just press enter and all the accounts will come up." << std::endl;
-			int ViewIndex;
-			std::cin >> ViewIndex;
-			int viewIndex = ViewIndex - 1;
-			int count = 0;
-
-			//looping through account list and finding the index
-			for (int i = 0; i < openedAccounts.size(); i++)
+			bool loop = true;
+			while (loop == true)
 			{
-				if (openedAccounts[i]->getIndex() == viewIndex)
+				try
 				{
-					std::string accountType = openedAccounts[i]->getType();
-					if (accountType == "c")
-					{
-						std::cout << "Current account" << std::endl;
-					}
-					else if (accountType == "s")
-					{
-						std::cout << "Savings account" << std::endl;
-					}
-					else
-					{
-						std::cout << "ISA savings account" << std::endl;
-					}
-					std::cout << "Balance of account:" << openedAccounts[i]->getBalance() << std::endl;
-					std::cout << "Transactions:" << std::endl;
-					std::vector<Transaction*> ahistory = openedAccounts[i]->getHistory();
+					//Display an account according to an index (starting from 1)
+					std::cout << "Please provide an index for the account you want to view (Starting from 1). If you do not know the index just press enter and all the accounts will come up." << std::endl;
+					int ViewIndex;
+					std::cin >> ViewIndex;
+					int viewIndex = ViewIndex - 1;
+					int count = 0;
 
-					//Looping through the transactions of an account and output all info from each transaction
-					for (int j = 0; j < ahistory.size(); j++)
+					//looping through account list and finding the index
+					for (int i = 0; i < openedAccounts.size(); i++)
 					{
-						std::string transacType = ahistory[j]->getDesc();
-						if (transacType == "id")
+						if (openedAccounts[i]->getIndex() == viewIndex)
 						{
-							std::cout << "Initial deposit" << std::endl;
-						}
-						else if (transacType == "d")
-						{
-							std::cout << "Deposit" << std::endl;
+							std::string accountType = openedAccounts[i]->getType();
+							if (accountType == "c")
+							{
+								std::cout << "Current account" << std::endl;
+							}
+							else if (accountType == "s")
+							{
+								std::cout << "Savings account" << std::endl;
+							}
+							else
+							{
+								std::cout << "ISA savings account" << std::endl;
+							}
+							std::cout << "Balance of account:" << openedAccounts[i]->getBalance() << std::endl;
+							std::cout << "Transactions:" << std::endl;
+							std::vector<Transaction*> ahistory = openedAccounts[i]->getHistory();
+
+							//Looping through the transactions of an account and output all info from each transaction
+							for (int j = 0; j < ahistory.size(); j++)
+							{
+								std::string transacType = ahistory[j]->getDesc();
+								if (transacType == "id")
+								{
+									std::cout << "Initial deposit" << std::endl;
+								}
+								else if (transacType == "d")
+								{
+									std::cout << "Deposit" << std::endl;
+								}
+								else
+								{
+									std::cout << "Withdraw" << std::endl;
+								}
+								std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
+								std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
+							}
 						}
 						else
 						{
-							std::cout << "Withdraw" << std::endl;
+							count += 1;
 						}
-						std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
-						std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
+					}
+
+					//If the input was not an index that exists then display all of the accounts
+					if (count = openedAccounts.size())
+					{
+						//Loop through account list and output all info from each account
+						for (int i = 0; i < openedAccounts.size(); i++)
+						{
+							std::string accountType = openedAccounts[i]->getType();
+							if (accountType == "c")
+							{
+								std::cout << "Current account" << std::endl;
+							}
+							else if (accountType == "s")
+							{
+								std::cout << "Savings account" << std::endl;
+							}
+							else
+							{
+								std::cout << "ISA savings account" << std::endl;
+							}
+							std::cout << "Balance of account:" << openedAccounts[i]->getBalance() << std::endl;
+							std::cout << "Transactions:" << std::endl;
+							std::vector<Transaction*> ahistory = openedAccounts[i]->getHistory();
+
+							//Looping through the transactions of an account and ouput all info from each transaction
+							for (int j = 0; j < ahistory.size(); j++)
+							{
+								std::string transacType = ahistory[j]->getDesc();
+								if (transacType == "id")
+								{
+									std::cout << "Initial deposit" << std::endl;
+								}
+								else if (transacType == "d")
+								{
+									std::cout << "Deposit" << std::endl;
+								}
+								else
+								{
+									std::cout << "Withdrawal" << std::endl;
+								}
+								std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
+								std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
+							}
+						}
 					}
 				}
-				else
+				catch (std::invalid_argument)
 				{
-					count += 1;
-				}
-			}
-
-			//If the input was not an index that exists then display all of the accounts
-			if (count = openedAccounts.size())
-			{
-				//Loop through account list and output all info from each account
-				for (int i = 0; i < openedAccounts.size(); i++)
-				{
-					std::string accountType = openedAccounts[i]->getType();
-					if (accountType == "c")
-					{
-						std::cout << "Current account" << std::endl;
-					}
-					else if (accountType == "s")
-					{
-						std::cout << "Savings account" << std::endl;
-					}
-					else
-					{
-						std::cout << "ISA savings account" << std::endl;
-					}
-					std::cout << "Balance of account:" << openedAccounts[i]->getBalance() << std::endl;
-					std::cout << "Transactions:" << std::endl;
-					std::vector<Transaction*> ahistory = openedAccounts[i]->getHistory();
-
-					//Looping through the transactions of an account and ouput all info from each transaction
-					for (int j = 0; j < ahistory.size(); j++)
-					{
-						std::string transacType = ahistory[j]->getDesc();
-						if (transacType == "id")
-						{
-							std::cout << "Initial deposit" << std::endl;
-						}
-						else if (transacType == "d")
-						{
-							std::cout << "Deposit" << std::endl;
-						}
-						else
-						{
-							std::cout << "Withdrawal" << std::endl;
-						}
-						std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
-						std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
-					}
+					std::cout << "Please input a number with 0 decimal spaces." << std::endl;
 				}
 			}
 		}
@@ -332,89 +384,90 @@ int main()
 		{
 			//Allow user to withdraw funds from an account
 			bool loop = true;
-			bool loop2 = true;
 			int count = 0;
 			int place;
 
 			//Input verification 
 			while (loop == true)
 			{
-				//Inputting the account index
-				std::cout << "Please input the index for the account you want to withdraw from (Starting from 1)." << std::endl;
-				int WithIndex;
-				std::cin >> WithIndex;
-				int withIndex = WithIndex - 1;
-
-				//Finding if the account index is in the list
-				for (int i = 0; i < openedAccounts.size(); i++)
+				try
 				{
-					//If it is in the list
-					if (withIndex == openedAccounts[i]->getIndex())
+					//Inputting the account index
+					std::cout << "Please input the index for the account you want to withdraw from (Starting from 1)." << std::endl;
+					int WithIndex;
+					std::cin >> WithIndex;
+					int withIndex = WithIndex - 1;
+
+					//Finding if the account index is in the list
+					for (int i = 0; i < openedAccounts.size(); i++)
 					{
-						//Save the position and end loop
-						place = i;
-						loop = false;
-					}
-					else
-					{
-						count += 1;
-					}
-				}
-				//If gone through list and no matching index
-				if (count == openedAccounts.size())
-				{
-					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
-				}
-			}
-
-			//input verification 
-			while (loop2 == true)
-			{
-
-				//Inputting amount to withdraw
-				std::cout << "Please input the amount you want to withdraw." << std::endl;
-				int amount;
-				std::cin >> amount;
-
-				//If amount is negative
-				if (amount < 0)
-				{
-					std::cout << "Please input a positive number." << std::endl;
-				}
-				//If amount is positive
-				else
-				{
-					if (openedAccounts[place]->getType() == "c")
-					{
-						Current* c = new Current();
-
-						//If amount is more than balance 
-						if (openedAccounts[place]->getBalance() < amount)
+						//If it is in the list
+						if (withIndex == openedAccounts[i]->getIndex())
 						{
-							std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+							//Save the position and end loop
+							place = i;
+							//Inputting amount to withdraw
+							std::cout << "Please input the amount you want to withdraw." << std::endl;
+							int amount;
+							std::cin >> amount;
+
+							//If amount is negative
+							if (amount < 0)
+							{
+								std::cout << "Please input a positive number." << std::endl;
+							}
+							//If amount is positive
+							else
+							{
+								if (openedAccounts[place]->getType() == "c")
+								{
+									Current* c = new Current();
+
+									//If amount is more than balance 
+									if (openedAccounts[place]->getBalance() < amount)
+									{
+										std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+									}
+									//If amount is less than balance
+									else
+									{
+										c->withdraw(openedAccounts, place, amount);
+										loop = false;
+									}
+
+								}
+								else
+								{
+									Savings* sa = new Savings();
+
+									//If amount is more than balance 
+									if (openedAccounts[place]->getBalance() < amount)
+									{
+										std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+									}
+									//If amount is less than balance
+									else
+									{
+										sa->withdraw(openedAccounts, place, amount);
+										loop = false;
+									}
+								}
+							}
 						}
-						//If amount is less than balance
 						else
 						{
-							c->withdraw(openedAccounts, place, amount);
-						}
-
-					}
-					else
-					{
-						Savings* sa = new Savings();
-
-						//If amount is more than balance 
-						if (openedAccounts[place]->getBalance() < amount)
-						{
-							std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
-						}
-						//If amount is less than balance
-						else
-						{
-							sa->withdraw(openedAccounts, place, amount);
+							count += 1;
+							//If gone through list and no matching index
+							if (count == openedAccounts.size())
+							{
+								std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+							}
 						}
 					}
+				}
+				catch (std::invalid_argument)
+				{
+					std::cout << "Please enter a number with no decimal spaces." << std::endl;
 				}
 			}
 		}
@@ -424,63 +477,64 @@ int main()
 			int place;
 			int count = 0;
 			bool loop = true;
-			bool loop2 = true;
+
 			//Input verification 
 			while (loop == true)
 			{
-				//Inputting the account index
-				std::cout << "Please input the index for the account you want to withdraw from (Starting from 1)." << std::endl;
-				int WithIndex;
-				std::cin >> WithIndex;
-				int withIndex = WithIndex - 1;
+				try
+				{
+					//Inputting the account index
+					std::cout << "Please input the index for the account you want to withdraw from (Starting from 1)." << std::endl;
+					int WithIndex;
+					std::cin >> WithIndex;
+					int withIndex = WithIndex - 1;
 
-				//Finding if the account index is in the list
-				for (int i = 0; i < openedAccounts.size(); i++)
-				{
-					//If it is in the list
-					if (withIndex == openedAccounts[i]->getIndex())
+					//Finding if the account index is in the list
+					for (int i = 0; i < openedAccounts.size(); i++)
 					{
-						//Save the position and end loop
-						place = i;
-						loop = false;
-					}
-					else
-					{
-						count += 1;
+						//If it is in the list
+						if (withIndex == openedAccounts[i]->getIndex())
+						{
+							//Save the position and end loop
+							place = i;
+							//Inputting amount to deposit
+							std::cout << "Please input the amount you would like to deposit." << std::endl;
+							int amount;
+							std::cin >> amount;
+							if (amount > 0)
+							{
+								if (openedAccounts[place]->getType() == "c")
+								{
+									Current* ca = new Current();
+									ca->deposit(openedAccounts, place, amount);
+									loop = false;
+								}
+								else
+								{
+									Savings* sa = new Savings();
+									sa->deposit(openedAccounts, place, amount);
+									loop = false;
+								}
+							}
+							else
+							{
+								std::cout << "Please input an amount above 0." << std::endl;
+							}
+						}
+						else
+						{
+							count += 1;
+							//If gone through list and no matching index
+							if (count == openedAccounts.size())
+							{
+								std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+							}
+						}
 					}
 				}
-				//If gone through list and no matching index
-				if (count == openedAccounts.size())
+				catch (std::invalid_argument)
 				{
-					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
-				}
-			}
-
-			//input verification
-			while (loop2 == true)
-			{
-				//Inputting amount to deposit
-				std::cout << "Please input the amount you would like to deposit." << std::endl;
-				int amount;
-				std::cin >> amount;
-				if (amount > 0)
-				{
-					if (openedAccounts[place]->getType() == "c")
-					{
-						Current* ca = new Current();
-						ca->deposit(openedAccounts, place, amount);
-						loop2 = false;
-					}
-					else
-					{
-						Savings* sa = new Savings();
-						sa->deposit(openedAccounts, place, amount);
-						loop2 = false;
-					}
-				}
-				else
-				{
-					std::cout << "Please input an amount above 0." << std::endl;
+					std::cout << "Please input a number without decimal spaces." << std::endl;
 				}
 			}
 		}
@@ -488,141 +542,218 @@ int main()
 		{
 			//Allow user to transfer funds between accounts
 			bool loop = true;
+			bool loop2 = true;
+			bool loop3 = true;
 			int place2;
 			int place;
-			int count;
+			int count = 0;
 
 			//Input verification 
 			while (loop == true)
 			{
-				//Inputting the account index
-				std::cout << "Please input the index for the account you want to transfer from (Starting from 1)." << std::endl;
-				int Index;
-				std::cin >> Index;
-				int index = Index - 1;
-
-				//Finding if the account index is in the list
-				for (int i = 0; i < openedAccounts.size(); i++)
+				try
 				{
-					//If it is in the list
-					if (index == openedAccounts[i]->getIndex())
+					//Inputting the account index
+					std::cout << "Please input the index for the account you want to transfer from (Starting from 1)." << std::endl;
+					int Index;
+					std::cin >> Index;
+					int index = Index - 1;
+
+					//Finding if the account index is in the list
+					for (int i = 0; i < openedAccounts.size(); i++)
 					{
-						//Save the position and end loop
-						place = i;
-						loop = false;
-					}
-					else
-					{
-						count += 1;
-					}
-				}
-				//If gone through list and no matching index
-				if (count == openedAccounts.size())
-				{
-					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
-				}
-			}
-
-			//Input verification 
-			while (loop == true)
-			{
-				//Inputting the account index
-				std::cout << "Please input the index for the account you want to transfer to (Starting from 1)." << std::endl;
-				int Index;
-				std::cin >> Index;
-				int index = Index - 1;
-
-				//Finding if the account index is in the list
-				for (int i = 0; i < openedAccounts.size(); i++)
-				{
-					//If it is in the list
-					if (index == openedAccounts[i]->getIndex())
-					{
-						//Save the position and end loop
-						place2 = i;
-						loop = false;
-					}
-					//If it isn't in the list
-					else
-					{
-						count += 1;
-					}
-				}
-				//If gone through list and no matching index
-				if (count == openedAccounts.size())
-				{
-					std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
-				}
-			}
-
-			while (loop = true)
-			{
-				//Inputting amount to transfer
-				std::cout << "Please input the amount you would like to transfer." << std::endl;
-				int amount;
-				std::cin >> amount;
-
-				//If amount is negative or 0
-				if (amount <= 0)
-				{
-					std::cout << "Please input a number above 0." << std::endl;
-				}
-				//If amount is above 0;
-				else
-				{
-					//If account type is current
-					if (openedAccounts[place]->getType() == "c")
-					{
-						Current* c = new Current();
-
-						//If amount is more than balance 
-						if (openedAccounts[place]->getBalance() < amount)
+						//If it is in the list
+						if (index == openedAccounts[i]->getIndex())
 						{
-							std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+							//Save the position and end loop
+							place = i;
+
+							//Inputting the 2nd account index
+							std::cout << "Please input the index for the account you want to transfer to (Starting from 1)." << std::endl;
+							int Index;
+							std::cin >> Index;
+							int index = Index - 1;
+
+							//Finding if the 2nd account index is in the list
+							for (int i = 0; i < openedAccounts.size(); i++)
+							{
+								//If it is in the list
+								if (index == openedAccounts[i]->getIndex())
+								{
+									//Save the position and end loop
+									place2 = i;
+
+									//Inputting amount to transfer
+									std::cout << "Please input the amount you would like to transfer." << std::endl;
+									int amount;
+									std::cin >> amount;
+
+									//If amount is negative or 0
+									if (amount <= 0)
+									{
+										std::cout << "Please input a number above 0." << std::endl;
+									}
+									//If amount is above 0;
+									else
+									{
+										//If account type is current
+										if (openedAccounts[place]->getType() == "c")
+										{
+											Current* c = new Current();
+
+											//If amount is more than balance 
+											if (openedAccounts[place]->getBalance() < amount)
+											{
+												std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+											}
+											//If amount is less than balance
+											else
+											{
+												c->withdraw(openedAccounts, place, amount);
+											}
+										}
+										//If account type is savings
+										else
+										{
+											Savings* s = new Savings();
+
+											//If amount is more than balance 
+											if (openedAccounts[place]->getBalance() < amount)
+											{
+												std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
+											}
+											//If amount is less than balance
+											else
+											{
+												s->withdraw(openedAccounts, place, amount);
+											}
+										}
+
+										//If account type is current
+										if (openedAccounts[place2]->getType() == "c")
+										{
+											Current* c = new Current();
+											c->deposit(openedAccounts, place2, amount);
+											loop = false;
+										}
+										//If account type is savings
+										else
+										{
+											Savings* s = new Savings();
+											s->deposit(openedAccounts, place2, amount);
+											loop = false;
+										}
+									}
+								}
+								//If it isn't in the list
+								else
+								{
+									count += 1;
+									//If gone through list and no matching index
+									if (count == openedAccounts.size())
+									{
+										std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+									}
+								}
+							}
 						}
-						//If amount is less than balance
 						else
 						{
-							c->withdraw(openedAccounts, place, amount);
+							count += 1;
+							//If gone through list and no matching index
+							if (count == openedAccounts.size())
+							{
+								std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+							}
 						}
 					}
-					//If account type is savings
-					else 
-					{
-						Savings* s = new Savings();
-
-						//If amount is more than balance 
-						if (openedAccounts[place]->getBalance() < amount)
-						{
-							std::cout << "The amount you want to withdraw is more than the amount in your account plus your overdraft. Please choose a smaller amount." << std::endl;
-						}
-						//If amount is less than balance
-						else
-						{
-							s->withdraw(openedAccounts, place, amount);
-						}
-					}
-
-					//If account type is current
-					if (openedAccounts[place2]->getType() == "c")
-					{
-						Current* c = new Current();
-						c->deposit(openedAccounts, place2, amount);
-					}
-					//If account type is savings
-					else
-					{
-						Savings* s = new Savings();
-						s->deposit(openedAccounts, place2, amount);
-					}
+				}
+				catch (std::invalid_argument)
+				{
+					std::cout << "Please input a number with no decimal spaces." << std::endl;
 				}
 			}
 		}
 		else if (command.compare("project") == 0)
 		{
 			//Compute compound interest t years into the future
+			bool loop = true;
+			bool loop2 = true;
+			int count = 0;
+			double interestRate;
 
+			while (loop == true)
+			{
+				try
+				{
+					std::cout << "Please enter the index (starting from 1) of the account you would ike to find the interest for." << std::endl;
+					int Index;
+					std::cin >> Index;
+					int index = Index - 1;
+
+					//Finding if the account index is in the list
+					for (int i = 0; i < openedAccounts.size(); i++)
+					{
+						//If it is in the list
+						if (index == openedAccounts[i]->getIndex())
+						{
+							//Input verification for years
+							while (loop2 == true)
+							{
+								try
+								{
+									//Inputting no of years
+									std::cout << "Please input the amount of years you would like to project the interest earned on a savings account for." << std::endl;
+									double years;
+									std::cin >> years;
+
+									Savings* s = new Savings();
+									if (openedAccounts[i]->getType() == "s")
+									{
+										interestRate = 0.85;
+									}
+									else if (openedAccounts[i]->getType() == "c")
+									{
+										std::cout << "The account needs to be a savings account" << std::endl;
+										continue;
+									}
+									else 
+									{
+										interestRate = 1.15;
+									}
+
+									//Calling the computeInterest function
+									double finalAmount = s->computeInterest(interestRate, openedAccounts[i]->getBalance(), years);
+									std::cout << "Your balance in " << years << "years will be " << finalAmount << std::endl;
+									loop2 = false;
+								}
+								catch (std::invalid_argument)
+								{
+									std::cout << "Please input a number with 0-2 decimal spaces." << std::endl;
+									loop2 = true;
+								}
+							}
+							loop = false;
+						}
+						else
+						{
+							count += 1;
+
+							//If gone through list and no matching index
+							if (count == openedAccounts.size())
+							{
+								std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+							}
+						}
+					}
+				}
+				catch (std::invalid_argument)
+				{
+					std::cout << "Please input a number with no decimal points." << std::endl;
+				}
+			}
 		}
+
 		//else if (command.compare("search"))
 		//{
 		//	allow users to search their account history for a transaction

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <cmath>
 #include "Account.h"
 #include "Transaction.h"
 
@@ -99,11 +100,11 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 }
 
 
-void Savings::setInterestRate(int ir)   //Setting balance
+void Savings::setInterestRate(double ir)   //Setting balance
 {
 	interestRate = ir;
 }
-int Savings::getInterestRate()    //Getting balance
+double Savings::getInterestRate()    //Getting balance
 {
 	return interestRate;
 }
@@ -117,9 +118,15 @@ int Savings::getIsa()    //Getting balance
 	return isa;
 }
 
-void Savings::computeInterest()
+double Savings::computeInterest(double interestRate, double balance, double time)
 {
-	std::cout << "1" << std::endl;
+	double finalAmount;
+	double notimes = 12;
+	double nt = 12 * time;
+	//Middle of the brackets
+	double mid = (interestRate / notimes) + 1;
+	finalAmount = balance * (std::pow(mid, nt));
+	return finalAmount;
 }
 
 void Savings::deposit(std::vector <Account*> openedAccounts, int place, double amount)

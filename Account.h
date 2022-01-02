@@ -38,7 +38,7 @@ public:
 class InterestEarning
 {
 public:
-	void virtual computeInterest() = 0;
+	double virtual computeInterest(double interestRate, double balance, double time) = 0;
 };
 
 class Current : public Account
@@ -60,15 +60,15 @@ protected:
 	bool isa;
 
 public:
-	void setInterestRate(int ir);  //Setting balance
+	void setInterestRate(double ir);  //Setting balance
 
-	int getInterestRate();    //Getting balance
+	double getInterestRate();    //Getting balance
 
 	void setIsa(bool i);   //Setting balance
 
 	int getIsa();   //Getting balance
 
-	void computeInterest();
+	double computeInterest(double interestRate, double balance, double time);
 
 	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
 
