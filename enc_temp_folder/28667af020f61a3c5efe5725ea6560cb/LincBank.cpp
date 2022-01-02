@@ -105,7 +105,6 @@ int main()
 							std::cout << "Please enter a number with 0-2 decimal spaces." << std::endl;
 						}
 					}
-					parameters.clear();
 
 					//Setting balance
 					c->setBalance(input); 
@@ -168,7 +167,6 @@ int main()
 							std::cout << "Please enter a number with 0-2 decimal spaces." << std::endl;
 						}
 					}
-					parameters.clear();
 
 					//Setting balance
 					s->setBalance(input);   
@@ -240,7 +238,6 @@ int main()
 							std::cout << "Please input a number with 0-2 decimal spaces." << std::endl;
 						}
 					}
-					parameters.clear();
 
 					//Setting balance
 					i->setBalance(input);
