@@ -49,6 +49,32 @@ int main()
 			}
 			else if (command.compare("open") == 0)
 			{
+				//Checking if the amount value has only 2 or less decimal spaces
+				std::vector<char> decimalCheck;
+				bool pointCheck = false;
+
+				//Looping through the string
+				for (char c : parameters[2])
+				{
+					//If there is a decimal space
+					if (pointCheck == true)
+					{
+						//Add all numbers after decimal to the list
+						decimalCheck.emplace_back(c);
+					}
+					//Setting the bool value
+					if (c == '.')
+					{
+						pointCheck = true;
+					}
+				}
+
+				if (decimalCheck.size() > 2)
+				{
+					std::cout << "Please input a decimal with only 2 decimal spaces" << std::endl;
+					continue;
+				}
+
 				//If current account
 				if (parameters[1] == "1")
 				{
@@ -97,8 +123,12 @@ int main()
 					//Adding transaction details to history
 					c->setHistory(t);
 
+					delete t;
+
 					//Putting object into accounts list
 					openedAccounts.emplace_back(c);
+
+					delete c;
 
 					std::cout << "A current account has been opened with a balance of " <<parameters[2] << " pounds." << std::endl;
 				}
@@ -141,8 +171,12 @@ int main()
 
 					s->setHistory(t);
 
+					delete t;
+
 					//Putting object into accounts list
 					openedAccounts.emplace_back(s);
+
+					delete s;
 
 					std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
@@ -196,8 +230,12 @@ int main()
 					//Setting the history using the transaction object
 					i->setHistory(t);
 
+					delete t;
+
 					//Adding the savings object to the vector
 					openedAccounts.emplace_back(i);
+
+					delete i;
 
 					std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
@@ -309,6 +347,31 @@ int main()
 			}
 			else if (command.compare("withdraw") == 0)
 			{
+				//Checking if the amount value has only 2 or less decimal spaces
+				std::vector<char> decimalCheck;
+				bool pointCheck = false;
+
+				//Looping through the string
+				for (char c : parameters[2])
+				{
+					//If there is a decimal space
+					if (pointCheck == true)
+					{
+						//Add all numbers after decimal to the list
+						decimalCheck.emplace_back(c);
+					}
+					//Setting the bool value
+					if (c == '.')
+					{
+						pointCheck = true;
+					}
+				}
+
+				if (decimalCheck.size() > 2)
+				{
+					std::cout << "Please input a decimal with only 2 decimal spaces" << std::endl;
+					continue;
+				}
 				//Allow user to withdraw funds from an account
 				int count = 0;
 
@@ -341,12 +404,13 @@ int main()
 								else
 								{
 									c->withdraw(openedAccounts, i, stoi(parameters[2]));
+									delete c;
 									std::cout << parameters[2] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 								}
 							}
 							else
 							{
-								Savings* sa = new Savings();
+								Savings* s = new Savings();
 
 								//If amount is more than balance 
 								if (openedAccounts[i]->getBalance() < stoi(parameters[2]))
@@ -356,7 +420,8 @@ int main()
 								//If amount is less than balance
 								else
 								{
-									sa->withdraw(openedAccounts, i, stoi(parameters[2]));
+									s->withdraw(openedAccounts, i, stoi(parameters[2]));
+									delete s;
 									std::cout << parameters[2] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 								}
 							}
@@ -375,6 +440,31 @@ int main()
 			}
 			else if (command.compare("deposit") == 0)
 			{
+				//Checking if the amount value has only 2 or less decimal spaces
+				std::vector<char> decimalCheck;
+				bool pointCheck = false;
+
+				//Looping through the string
+				for (char c : parameters[2])
+				{
+					//If there is a decimal space
+					if (pointCheck == true)
+					{
+						//Add all numbers after decimal to the list
+						decimalCheck.emplace_back(c);
+					}
+					//Setting the bool value
+					if (c == '.')
+					{
+						pointCheck = true;
+					}
+				}
+
+				if (decimalCheck.size() > 2)
+				{
+					std::cout << "Please input a decimal with only 2 decimal spaces" << std::endl;
+					continue;
+				}
 				//Allow user to deposit funds into an account
 				int count = 0;
 				int withIndex = stoi(parameters[1]) - 1;
@@ -389,14 +479,16 @@ int main()
 						{
 							if (openedAccounts[i]->getType() == "c")
 							{
-								Current* ca = new Current();
-								ca->deposit(openedAccounts, i, stoi(parameters[2]));
+								Current* c = new Current();
+								c->deposit(openedAccounts, i, stoi(parameters[2]));
+								delete c;
 								std::cout << parameters[2] << " pounds has been deposited into account " << parameters[1] << std::endl;
 							}
 							else
 							{
-								Savings* sa = new Savings();
-								sa->deposit(openedAccounts, i, stoi(parameters[2]));
+								Savings* s = new Savings();
+								s->deposit(openedAccounts, i, stoi(parameters[2]));
+								delete s;
 								std::cout << parameters[2] << " pounds has been deposited into account " << parameters[1] << std::endl;
 							}
 						}
@@ -418,6 +510,31 @@ int main()
 			}
 			else if (command.compare("transfer") == 0)
 			{
+				//Checking if the amount value has only 2 or less decimal spaces
+				std::vector<char> decimalCheck;
+				bool pointCheck = false;
+
+				//Looping through the string
+				for (char c : parameters[3])
+				{
+					//If there is a decimal space
+					if (pointCheck == true)
+					{
+						//Add all numbers after decimal to the list
+						decimalCheck.emplace_back(c);
+					}
+					//Setting the bool value
+					if (c == '.')
+					{
+						pointCheck = true;
+					}
+				}
+
+				if (decimalCheck.size() > 2)
+				{
+					std::cout << "Please input a decimal with only 2 decimal spaces" << std::endl;
+					continue;
+				}
 				//Allow user to transfer funds between accounts
 				int count = 0;
 				int count2 = 0;
@@ -461,6 +578,7 @@ int main()
 										else
 										{
 											c->withdraw(openedAccounts, i, stoi(parameters[3]));
+											delete c;
 											std::cout << parameters[3] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 										}
 									}
@@ -478,6 +596,7 @@ int main()
 										else
 										{
 											s->withdraw(openedAccounts, i, stoi(parameters[3]));
+											delete s;
 											std::cout << parameters[3] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 										}
 									}
@@ -489,6 +608,7 @@ int main()
 									{
 										Current* c = new Current();
 										c->deposit(openedAccounts, j, stoi(parameters[3]));
+										delete c;
 										std::cout << parameters[3] << " pounds has been deposited into account " << parameters[2] << std::endl;
 									}
 									//If account type is savings
@@ -496,6 +616,7 @@ int main()
 									{
 										Savings* s = new Savings();
 										s->deposit(openedAccounts, j, stoi(parameters[3]));
+										delete s;
 										std::cout << parameters[3] << " pounds has been deposited into account " << parameters[2] << std::endl;
 									}
 								}
@@ -554,6 +675,7 @@ int main()
 
 						//Calling the computeInterest function
 						double finalAmount = s->computeInterest(interestRate, openedAccounts[i]->getBalance(), stoi(parameters[2]));
+						delete s;
 						std::cout << "Your balance in " << parameters[2] << " years will be " << finalAmount << " pounds." << std::endl;
 					}
 					else
@@ -568,12 +690,61 @@ int main()
 					}
 				}
 			}
+			else if (command.compare("search") == 0)
+			{
+				//allow users to search their account history for a transaction
+				int count = 0;
+				int count2 = 0;
+				int searchIndex = stoi(parameters[1]) - 1;
 
-			//else if (command.compare("search"))
-			//{
-			//	allow users to search their account history for a transaction
-			//  (this is a stretch task)
-			//}
+				//Finding if the account index is in the list
+				for (int i = 0; i < openedAccounts.size(); i++)
+				{
+					//If it is in the list
+					if (searchIndex == openedAccounts[i]->getIndex())
+					{
+						std::vector<Transaction*> history = openedAccounts[i]->getHistory();
+						for (int j = 0; j < history.size(); j++)
+						{
+							if (history[j]->getValue() == stoi(parameters[2]))
+							{
+								if (history[j]->getDesc() == "id")
+								{
+									std::cout << "Initial deposit" << std::endl;
+								}
+								else if (history[j]->getDesc() == "d")
+								{
+									std::cout << "Deposit" << std::endl;
+								}
+								else
+								{
+									std::cout << "Withdraw" << std::endl;
+								}
+								std::cout << "Value: " << history[j]->getValue() << " pounds" << std::endl;
+								std::cout << "Date and time: " << history[j]->getTimeStamp() << std::endl;
+ 							}
+							else
+							{
+								count += 1;
+								//If gone through and there is no matching value
+								if (count == history.size())
+								{
+									std::cout << "There is no transaction with that value." << std::endl;
+								}
+							}
+						}
+					}
+					else
+					{
+						count2 += 1;
+						//If gone through list and no matching index
+						if (count2 == openedAccounts.size())
+						{
+							std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
+						}
+					}
+				}
+			}
 		}
 		catch (std::invalid_argument)
 		{

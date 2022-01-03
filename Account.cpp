@@ -6,6 +6,15 @@
 #include "Account.h"
 #include "Transaction.h"
 
+Account::Account()
+{
+	
+}
+
+Account::~Account()
+{
+
+}
 
 void Account::setBalance(double b)   //Setting balance
 {
@@ -50,8 +59,15 @@ void Account::toString()
 	std::cout << "1" << std::endl;
 }
 
+Current::Current()
+{
+	overdraft = 500;
+}
 
+Current::~Current()
+{
 
+}
 
 void Current::deposit(std::vector <Account*> openedAccounts, int place, double amount)
 {
@@ -92,6 +108,15 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 	openedAccounts[place]->setHistory(t);
 }
 
+
+Savings::Savings()
+{
+
+}
+Savings::~Savings()
+{
+
+}
 
 void Savings::setInterestRate(double ir)   //Setting balance
 {

@@ -1,6 +1,15 @@
 #include <iostream>
 #include "transaction.h"
 
+Transaction::Transaction()
+{
+
+}
+
+Transaction::~Transaction()
+{
+
+}
 
 void Transaction::setDesc(std::string d)   //Setting desc
 {

@@ -11,6 +11,9 @@ private:
 	int index;
 
 public:
+	Account();
+	~Account();
+
 	void setBalance(double b);   //Setting balance
 
 	double getBalance();    //Getting balance
@@ -46,6 +49,9 @@ class Current : public Account
 public:
 	int overdraft;
 
+	Current();
+	~Current();
+
 	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
 
 	void toString();
@@ -60,6 +66,10 @@ protected:
 	bool isa;
 
 public:
+	Savings();
+
+	~Savings();
+
 	void setInterestRate(double ir);  //Setting balance
 
 	double getInterestRate();    //Getting balance

@@ -10,6 +10,9 @@ protected:
 	double value;
 
 public:
+	Transaction();
+	~Transaction();
+
 	void setDesc(std::string d);   //Setting desc
 
 	std::string getDesc();    //Getting desc
