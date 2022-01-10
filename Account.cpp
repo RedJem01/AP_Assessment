@@ -6,16 +6,6 @@
 #include "Account.h"
 #include "Transaction.h"
 
-Account::Account()
-{
-	
-}
-
-Account::~Account()
-{
-
-}
-
 void Account::setBalance(double b)   //Setting balance
 {
 	balance = b;
@@ -54,20 +44,6 @@ int Account::getIndex()
 	return index;
 }
 
-void Account::toString()
-{
-	std::cout << "1" << std::endl;
-}
-
-Current::Current()
-{
-	overdraft = 500;
-}
-
-Current::~Current()
-{
-
-}
 
 void Current::deposit(std::vector <Account*> openedAccounts, int place, double amount)
 {
@@ -84,11 +60,6 @@ void Current::deposit(std::vector <Account*> openedAccounts, int place, double a
 	t->setTimeStamp(dt);
 	t->setValue(amount);
 	openedAccounts[place]->setHistory(t);
-}
-
-void Current::toString()
-{
-	std::cout << "1" << std::endl;
 }
 
 void Current::withdraw(std::vector <Account*> openedAccounts, int place, double amount)
@@ -108,15 +79,6 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 	openedAccounts[place]->setHistory(t);
 }
 
-
-Savings::Savings()
-{
-
-}
-Savings::~Savings()
-{
-
-}
 
 void Savings::setInterestRate(double ir)   //Setting balance
 {
@@ -162,11 +124,6 @@ void Savings::deposit(std::vector <Account*> openedAccounts, int place, double a
 	t->setTimeStamp(dt);
 	t->setValue(amount);
 	openedAccounts[place]->setHistory(t);
-}
-
-void Savings::toString()
-{
-	std::cout << "1" << std::endl;
 }
 
 void Savings::withdraw(std::vector <Account*> openedAccounts, int place, double amount)

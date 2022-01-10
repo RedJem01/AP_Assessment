@@ -5,15 +5,12 @@
 class Account
 {
 private:
-	double balance;
+	double balance = 0;
 	std::vector<Transaction*> history;
 	std::string type;
-	int index;
+	int index = 0;
 
 public:
-	Account();
-	~Account();
-
 	void setBalance(double b);   //Setting balance
 
 	double getBalance();    //Getting balance
@@ -33,8 +30,6 @@ public:
 
 	void virtual deposit(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 
-	void toString();
-
 	void virtual withdraw(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 };
 
@@ -47,14 +42,9 @@ public:
 class Current : public Account
 {
 public:
-	int overdraft;
-
-	Current();
-	~Current();
+	int overdraft = 500;
 
 	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
-
-	void toString();
 
 	void withdraw(std::vector <Account*> openedAccounts, int place, double amount);
 };
@@ -62,14 +52,10 @@ public:
 class Savings : public Account, public InterestEarning
 {
 protected:
-	int interestRate;
-	bool isa;
+	int interestRate = 0;
+	bool isa = false;
 
 public:
-	Savings();
-
-	~Savings();
-
 	void setInterestRate(double ir);  //Setting balance
 
 	double getInterestRate();    //Getting balance
@@ -81,8 +67,6 @@ public:
 	double computeInterest(double interestRate, double balance, double time);
 
 	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
-
-	void toString();
 
 	void withdraw(std::vector <Account*> openedAccounts, int place, double amount);
 };

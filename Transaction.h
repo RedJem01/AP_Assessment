@@ -10,9 +10,6 @@ protected:
 	double value;
 
 public:
-	Transaction();
-	~Transaction();
-
 	void setDesc(std::string d);   //Setting desc
 
 	std::string getDesc();    //Getting desc
@@ -26,7 +23,6 @@ public:
 	double getValue();    //Getting value
 
 	void toString();
-
 };
 
 #endif
