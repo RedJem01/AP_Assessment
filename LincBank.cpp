@@ -75,6 +75,8 @@ int main()
 					continue;
 				}
 
+				std::string type;
+
 				//If current account
 				if (parameters[1] == "1")
 				{
@@ -88,15 +90,6 @@ int main()
 							continue;
 						}
 					}
-					//Opening new current account
-					Account* c = new Current();
-
-					//Setting index
-					index += 1;
-					c->setIndex(index);
-
-					//Setting type
-					c->setType("c");
 
 					//If the amount is less than 0
 					if (stoi(parameters[2]) < 0)
@@ -105,48 +98,18 @@ int main()
 						continue;
 					}
 
-					//Setting balance
-					c->setBalance(stoi(parameters[2]));
+					type = "c";
 
-					//Making a new transaction object
-					Transaction* t = new Transaction();
-
-					//Finding current date and time
-					time_t now = time(0);
-					char* dt = ctime(&now);
-
-					//Setting attributes for transaction
-					t->setDesc("id");
-					t->setTimeStamp(dt);
-					t->setValue(stoi(parameters[2]));
-
-					//Adding transaction details to history
-					c->setHistory(t);
-
-					delete t;
-
-					//Putting object into accounts list
-					openedAccounts.emplace_back(c);
-
-					delete c;
-
+					//Opening new current account
+					Account* c = new Current();
+					
+					c->open(type, c, openedAccounts, index, stoi(parameters[2]));
+				
 					std::cout << "A current account has been opened with a balance of " <<parameters[2] << " pounds." << std::endl;
 				}
 				//If savings account
 				else if (parameters[1] == "2")
 				{
-					//Open new savings account
-					Savings* s = new Savings();
-
-					//A new account has been opened so index increases by 1
-					index += 1;
-
-					//Setting attributes
-					s->setIndex(index);
-					s->setType("s");
-					s->setInterestRate(0.85);
-					s->setIsa(false);
-
 					//If the amount is less than 0
 					if (stoi(parameters[2]) < 0)
 					{
@@ -154,29 +117,12 @@ int main()
 						continue;
 					}
 
-					//Setting balance
-					s->setBalance(stoi(parameters[2]));
+					type = "s";
 
-					//Making a new transaction object
-					Transaction* t = new Transaction();
-
-					//Finding current date and time
-					time_t now = time(0);
-					char* dt = ctime(&now);
-
-					//Setting attributes
-					t->setDesc("id");
-					t->setTimeStamp(dt);
-					t->setValue(stoi(parameters[2]));
-
-					s->setHistory(t);
-
-					delete t;
-
-					//Putting object into accounts list
-					openedAccounts.emplace_back(s);
-
-					delete s;
+					//Open new savings account
+					Account* s = new Savings();
+					
+					s->open(type, s, openedAccounts, index, stoi(parameters[2]));
 
 					std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
@@ -194,48 +140,18 @@ int main()
 						}
 					}
 
-					//Opening new ISa account through savings
-					Savings* i = new Savings();
-
-					//Seting index
-					index += 1;
-					i->setIndex(index);
-					i->setType("i");
-
-					i->setInterestRate(1.15);
-
-					i->setIsa(true);
-
 					if (stoi(parameters[2]) < 1000)
 					{
 						std::cout << "That is not over 1000 pounds. Please input an amount over 1000 pounds." << std::endl;
 						continue;
 					}
 
-					//Setting balance
-					i->setBalance(stoi(parameters[2]));
+					type = "i";
 
-					//Making a new transaction object
-					Transaction* t = new Transaction();
+					//Opening new ISa account through savings
+					Account* i = new Savings();
 
-					//Finding current date and time
-					time_t now = time(0);
-					char* dt = ctime(&now);
-
-					//Setting attributes
-					t->setDesc("id");
-					t->setTimeStamp(dt);
-					t->setValue(stoi(parameters[2]));
-
-					//Setting the history using the transaction object
-					i->setHistory(t);
-
-					delete t;
-
-					//Adding the savings object to the vector
-					openedAccounts.emplace_back(i);
-
-					delete i;
+					i->open(type, i, openedAccounts, index, stoi(parameters[2]));
 
 					std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}

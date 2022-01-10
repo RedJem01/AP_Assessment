@@ -44,6 +44,41 @@ int Account::getIndex()
 	return index;
 }
 
+void open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
+{
+	//Setting index
+	index += 1;
+	c->setIndex(index);
+
+	//Setting type
+	c->setType(type);
+
+	//Setting balance
+	c->setBalance(amount);
+
+	//Making a new transaction object
+	Transaction* t = new Transaction();
+
+	//Finding current date and time
+	time_t now = time(0);
+	char* dt = ctime(&now);
+
+	//Setting attributes for transaction
+	t->setDesc("id");
+	t->setTimeStamp(dt);
+	t->setValue(amount);
+
+	//Adding transaction details to history
+	c->setHistory(t);
+
+	delete t;
+
+	//Putting object into accounts list
+	openedAccounts.emplace_back(c);
+
+	delete c;
+}
+
 
 void Current::deposit(std::vector <Account*> openedAccounts, int place, double amount)
 {
@@ -78,7 +113,6 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 	t->setValue(amount);
 	openedAccounts[place]->setHistory(t);
 }
-
 
 void Savings::setInterestRate(double ir)   //Setting balance
 {
