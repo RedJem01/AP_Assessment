@@ -16,7 +16,8 @@ int main()
 	std::vector <Account*> openedAccounts;
 	int index = -1;
 
-	std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
+	std::cout << "~~~~~~~~~~~~ Welcome to LincBank! ~~~~~~~~~~~~~~" << std::endl;
+	std::cout << "~~~ Please type options for more information ~~~" << std::endl;
 
 	while (userCommand != "exit")
 	{
@@ -45,7 +46,7 @@ int main()
 			if (command.compare("options") == 0)
 			{
 				// display the various commands to the user
-				std::cout << "Options - Shows all of the commands\nOpen - Opens a new bank account\nView - Shows a bank account balance and recent transactions\nWithdraw - Withdraws an amount from the bank account \n Deposit - Deposits an amount into the bank account\nTransfer - Transfers an amount between bank accounts\nProject - Finds the compound interest after an amount of years" << std::endl;
+				std::cout << "open type initial_deposit: open a current (1), savings (2) or ISA (3) account \n view [index]: view balance and recent transactions \n withdraw sum: withdraw funds from most recently viewed account \n deposit sum: deposit funds into most recently viewed account \n transfer src dest sum: transfer funds between accounts \n project years: project balance forward in time \n exit: close this application \n options: view these options again" << std::endl;
 			}
 			else if (command.compare("open") == 0)
 			{
@@ -80,6 +81,7 @@ int main()
 				//If current account
 				if (parameters[1] == "1")
 				{
+					bool loop;
 					//Looping through the list of opened accounts
 					for (int i = 0; i < openedAccounts.size(); i++)
 					{
@@ -87,8 +89,12 @@ int main()
 						if (openedAccounts[i]->getType() == "c")
 						{
 							std::cout << "A current account already exists." << std::endl;
-							continue;
+							loop = true;
 						}
+					}
+					if (loop == true)
+					{
+						continue;
 					}
 
 					//If the amount is less than 0
@@ -129,6 +135,7 @@ int main()
 				//If ISA account
 				else if (parameters[1] == "3")
 				{
+					bool loop;
 					//Looping through the list of opened accounts
 					for (int i = 0; i < openedAccounts.size(); i++)
 					{
@@ -136,9 +143,14 @@ int main()
 						if (openedAccounts[i]->getType() == "i")
 						{
 							std::cout << "An ISA account already exists." << std::endl;
-							continue;
+							loop = true;
 						}
 					}
+					if (loop == true)
+					{
+						continue;
+					}
+
 
 					if (stoi(parameters[2]) < 1000)
 					{
@@ -565,6 +577,7 @@ int main()
 				//Compute compound interest t years into the future
 				int count = 0;
 				double interestRate;
+				bool loop;
 
 				int index = stoi(parameters[1]) - 1;
 
@@ -575,22 +588,24 @@ int main()
 					if (index == openedAccounts[i]->getIndex())
 					{
 						Savings* s = new Savings();
+						s->setBalance(openedAccounts[i]->getBalance());
 						if (openedAccounts[i]->getType() == "s")
 						{
-							interestRate = 0.85;
+							s->setInterestRate(0.85);
 						}
 						else if (openedAccounts[i]->getType() == "c")
 						{
 							std::cout << "The account needs to be a savings account" << std::endl;
-							continue;
+							loop = true;
+							break;
 						}
 						else
 						{
-							interestRate = 1.15;
+							s->setInterestRate(1.15);
 						}
 
 						//Calling the computeInterest function
-						double finalAmount = s->computeInterest(interestRate, openedAccounts[i]->getBalance(), stoi(parameters[2]));
+						double finalAmount = s->computeInterest(s->getInterestRate(), s->getBalance(), stoi(parameters[2]));
 						delete s;
 						std::cout << "Your balance in " << parameters[2] << " years will be " << finalAmount << " pounds." << std::endl;
 					}
@@ -604,6 +619,10 @@ int main()
 							std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
 						}
 					}
+				}
+				if (loop == true)
+				{
+					continue;
 				}
 			}
 			else if (command.compare("search") == 0)

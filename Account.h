@@ -58,6 +58,8 @@ protected:
 	bool isa = false;
 
 public:
+	Savings operator+ (Savings const& obj);
+
 	void setInterestRate(double ir);  //Setting balance
 
 	double getInterestRate();    //Getting balance

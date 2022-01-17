@@ -114,6 +114,15 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 	openedAccounts[place]->setHistory(t);
 }
 
+
+Savings operator+ (Savings s2)
+{
+	Savings s;
+	s.setBalance(s.getBalance() + s2.getBalance());
+	s.setInterestRate(s.getInterestRate() + s2.getInterestRate());
+	return s;
+}
+
 void Savings::setInterestRate(double ir)   //Setting balance
 {
 	interestRate = ir;
