@@ -51,7 +51,7 @@ int Account::getIndex()
 	return index;
 }
 
-Account* Account::open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
+std::vector<Account*> Account::open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
 {
 	//Setting index
 	index += 1;
@@ -79,7 +79,10 @@ Account* Account::open(std::string type, Account* c, std::vector<Account*> opene
 	c->setHistory(t);
 
 	delete t;
-	return c;
+	//Putting object into accounts list
+	openedAccounts.emplace_back(c);
+
+	return openedAccounts;
 }
 
 

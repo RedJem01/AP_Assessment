@@ -109,10 +109,7 @@ int main()
 					//Opening new current account
 					Account* c = new Current();
 					
-					c = c->open(type, c, openedAccounts, index, stoi(parameters[2]));
-
-					//Putting object into accounts list
-					openedAccounts.push_back(c);
+					openedAccounts = c->open(type, c, openedAccounts, index, stoi(parameters[2]));
 
 					delete c;
 				
@@ -133,10 +130,7 @@ int main()
 					//Open new savings account
 					Account* s = new Savings();
 					
-					s = s->open(type, s, openedAccounts, index, stoi(parameters[2]));
-
-					//Putting object into accounts list
-					openedAccounts.push_back(s);
+					openedAccounts = s->open(type, s, openedAccounts, index, stoi(parameters[2]));
 
 					delete s;
 
@@ -172,10 +166,7 @@ int main()
 
 					//Opening new ISa account through savings
 					Account* i = new Savings();
-					i = i -> open(type, i, openedAccounts, index, stoi(parameters[2]));
-
-					//Putting object into accounts list
-					openedAccounts.push_back(i);
+					openedAccounts = i -> open(type, i, openedAccounts, index, stoi(parameters[2]));
 
 					delete i;
 
