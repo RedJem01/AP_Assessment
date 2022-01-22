@@ -11,6 +11,8 @@ private:
 	int index = 0;
 
 public:
+	Account& operator + (Account& obj);
+
 	void setBalance(double b);   //Setting balance
 
 	double getBalance();    //Getting balance
@@ -32,7 +34,7 @@ public:
 
 	void virtual withdraw(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 
-	void open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount);
+	Account* open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount);
 };
 
 class InterestEarning
@@ -44,6 +46,8 @@ public:
 class Current : public Account
 {
 public:
+	Current operator + (Current& obj);
+
 	int overdraft = 500;
 
 	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
@@ -58,7 +62,7 @@ protected:
 	bool isa = false;
 
 public:
-	Savings operator+ (Savings const& obj);
+	Savings operator + (Savings& obj);
 
 	void setInterestRate(double ir);  //Setting balance
 

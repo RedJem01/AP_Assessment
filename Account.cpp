@@ -6,6 +6,13 @@
 #include "Account.h"
 #include "Transaction.h"
 
+//Account class
+Account& Account::operator + (Account& obj)
+{
+	this->setBalance(this->getBalance() + this->getBalance());
+	return *this;
+}
+
 void Account::setBalance(double b)   //Setting balance
 {
 	balance = b;
@@ -44,7 +51,7 @@ int Account::getIndex()
 	return index;
 }
 
-void open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
+Account* Account::open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
 {
 	//Setting index
 	index += 1;
@@ -72,14 +79,13 @@ void open(std::string type, Account* c, std::vector<Account*> openedAccounts, in
 	c->setHistory(t);
 
 	delete t;
-
-	//Putting object into accounts list
-	openedAccounts.emplace_back(c);
-
-	delete c;
+	return c;
 }
 
 
+
+
+//Current class
 void Current::deposit(std::vector <Account*> openedAccounts, int place, double amount)
 {
 	//Finding current date and time
@@ -115,14 +121,9 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 }
 
 
-Savings operator+ (Savings s2)
-{
-	Savings s;
-	s.setBalance(s.getBalance() + s2.getBalance());
-	s.setInterestRate(s.getInterestRate() + s2.getInterestRate());
-	return s;
-}
 
+
+//Savings class
 void Savings::setInterestRate(double ir)   //Setting balance
 {
 	interestRate = ir;

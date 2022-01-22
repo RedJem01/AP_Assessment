@@ -81,7 +81,7 @@ int main()
 				//If current account
 				if (parameters[1] == "1")
 				{
-					bool loop;
+					bool loop = false;;
 					//Looping through the list of opened accounts
 					for (int i = 0; i < openedAccounts.size(); i++)
 					{
@@ -109,7 +109,12 @@ int main()
 					//Opening new current account
 					Account* c = new Current();
 					
-					c->open(type, c, openedAccounts, index, stoi(parameters[2]));
+					c = c->open(type, c, openedAccounts, index, stoi(parameters[2]));
+
+					//Putting object into accounts list
+					openedAccounts.push_back(c);
+
+					delete c;
 				
 					std::cout << "A current account has been opened with a balance of " <<parameters[2] << " pounds." << std::endl;
 				}
@@ -128,14 +133,19 @@ int main()
 					//Open new savings account
 					Account* s = new Savings();
 					
-					s->open(type, s, openedAccounts, index, stoi(parameters[2]));
+					s = s->open(type, s, openedAccounts, index, stoi(parameters[2]));
+
+					//Putting object into accounts list
+					openedAccounts.push_back(s);
+
+					delete s;
 
 					std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
 				//If ISA account
 				else if (parameters[1] == "3")
 				{
-					bool loop;
+					bool loop = false;
 					//Looping through the list of opened accounts
 					for (int i = 0; i < openedAccounts.size(); i++)
 					{
@@ -162,8 +172,12 @@ int main()
 
 					//Opening new ISa account through savings
 					Account* i = new Savings();
+					i = i -> open(type, i, openedAccounts, index, stoi(parameters[2]));
 
-					i->open(type, i, openedAccounts, index, stoi(parameters[2]));
+					//Putting object into accounts list
+					openedAccounts.push_back(i);
+
+					delete i;
 
 					std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
@@ -395,13 +409,13 @@ int main()
 				}
 				//Allow user to deposit funds into an account
 				int count = 0;
-				int withIndex = stoi(parameters[1]) - 1;
+				int depIndex = stoi(parameters[1]) - 1;
 
 				//Finding if the account index is in the list
 				for (int i = 0; i < openedAccounts.size(); i++)
 				{
 					//If it is in the list
-					if (withIndex == openedAccounts[i]->getIndex())
+					if (depIndex == openedAccounts[i]->getIndex())
 					{
 						if (stoi(parameters[2]) > 0)
 						{
@@ -438,6 +452,11 @@ int main()
 			}
 			else if (command.compare("transfer") == 0)
 			{
+				if (parameters[1] == parameters[2])
+				{
+					std::cout << "Those indexes are the same. Please choose two different indexes." << std::endl;
+					continue;
+				}
 				//Checking if the amount value has only 2 or less decimal spaces
 				std::vector<char> decimalCheck;
 				bool pointCheck = false;
@@ -678,6 +697,50 @@ int main()
 							std::cout << "The index you inputted has no account attatched to it. Please try again." << std::endl;
 						}
 					}
+				}
+			}
+			else if (command.compare("add") == 0)
+			{
+				if (parameters[1] == parameters[2])
+				{
+					std::cout << "Those indexes are the same. Please choose two different indexes." << std::endl;
+					continue;
+				}
+				int count1 = 0;
+				int count2 = 0;
+				int addIndex1 = stoi(parameters[1]) - 1;
+				int addIndex2 = stoi(parameters[2]) - 1;
+				//Finding if the account index is in the list
+				for (int i = 0; i < openedAccounts.size(); i++)
+				{
+					//If index 1 is in the list
+					if (addIndex1 == openedAccounts[i]->getIndex())
+					{
+						for (int j = 0; j < openedAccounts.size(); j++)
+						{
+							//If index 2 is in the list
+							if (addIndex2 == openedAccounts[j]->getIndex())
+							{
+								Account* a1 = openedAccounts[i];
+								Account* a2 = openedAccounts[i];
+								Account& a = *a1 + *a2;
+								std::cout << "The sum of the balances from those accounts is: " << a.getBalance() << std::endl;
+							}
+							else
+							{
+								count1 += 1;
+							}
+						}
+					}
+					else
+					{
+						count2 += 1;
+					}
+				}
+				if ((count1 == openedAccounts.size()) or (count2 == openedAccounts.size()))
+				{
+					std::cout << "One of the indexes you inputted is not in the list." << std::endl;
+					continue;
 				}
 			}
 		}
