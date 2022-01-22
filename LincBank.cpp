@@ -7,6 +7,21 @@
 #include "Account.h"
 #include "Transaction.h"
 
+bool findType(std::string types, std::vector<Account*> openedAccounts)
+{
+	auto result = std::find_if(openedAccounts.begin(), openedAccounts.end(), [&](Account* it) 
+	{
+		return it->getType() == types;
+	});
+	if (result == openedAccounts.end()) 
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
 
 
 int main()
@@ -83,19 +98,26 @@ int main()
 				{
 					bool loop = false;;
 					//Looping through the list of opened accounts
-					for (int i = 0; i < openedAccounts.size(); i++)
-					{
-						//If any are current accounts
-						if (openedAccounts[i]->getType() == "c")
-						{
-							std::cout << "A current account already exists." << std::endl;
-							loop = true;
-						}
-					}
-					if (loop == true)
+					//for (int i = 0; i < openedAccounts.size(); i++)
+					//{
+					//	//If any are current accounts
+					//	if (openedAccounts[i]->getType() == "c")
+					//	{
+					//		std::cout << "A current account already exists." << std::endl;
+					//		loop = true;
+					//	}
+					//}
+					//if (loop == true)
+					//{
+					//	continue;
+					//}
+
+					bool found = findType("c", openedAccounts);
+					if (found == true)
 					{
 						continue;
 					}
+					
 
 					//If the amount is less than 0
 					if (stoi(parameters[2]) < 0)
@@ -586,7 +608,6 @@ int main()
 			{
 				//Compute compound interest t years into the future
 				int count = 0;
-				double interestRate;
 				bool loop;
 
 				int index = stoi(parameters[1]) - 1;

@@ -7,11 +7,19 @@
 #include "Transaction.h"
 
 //Account class
+Account::Account(double a, int b, std::string c)
+{
+	balance = a;
+	index = b;
+	type = c;
+}
+
 Account& Account::operator + (Account& obj)
 {
 	this->setBalance(this->getBalance() + this->getBalance());
 	return *this;
 }
+
 
 void Account::setBalance(double b)   //Setting balance
 {
@@ -79,6 +87,7 @@ std::vector<Account*> Account::open(std::string type, Account* c, std::vector<Ac
 	c->setHistory(t);
 
 	delete t;
+
 	//Putting object into accounts list
 	openedAccounts.emplace_back(c);
 
@@ -89,6 +98,11 @@ std::vector<Account*> Account::open(std::string type, Account* c, std::vector<Ac
 
 
 //Current class
+Current::Current(int a)
+{
+	overdraft = a;
+}
+
 void Current::deposit(std::vector <Account*> openedAccounts, int place, double amount)
 {
 	//Finding current date and time
@@ -127,6 +141,12 @@ void Current::withdraw(std::vector <Account*> openedAccounts, int place, double 
 
 
 //Savings class
+Savings::Savings(double a, bool b)
+{
+	interestRate = a;
+	isa = b;
+}
+
 void Savings::setInterestRate(double ir)   //Setting balance
 {
 	interestRate = ir;

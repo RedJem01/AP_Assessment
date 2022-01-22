@@ -11,6 +11,8 @@ private:
 	int index = 0;
 
 public:
+	Account(double a = 0, int b = 0, std::string = "");
+
 	Account& operator + (Account& obj);
 
 	void setBalance(double b);   //Setting balance
@@ -46,9 +48,9 @@ public:
 class Current : public Account
 {
 public:
-	Current operator + (Current& obj);
+	int overdraft;
 
-	int overdraft = 500;
+	Current(int a = 0);
 
 	void deposit(std::vector <Account*> openedAccounts, int place, double amount);
 
@@ -58,10 +60,12 @@ public:
 class Savings : public Account, public InterestEarning
 {
 protected:
-	int interestRate = 0;
-	bool isa = false;
+	double interestRate;
+	bool isa;
 
 public:
+	Savings(double a = 0, bool b = false);
+
 	Savings operator + (Savings& obj);
 
 	void setInterestRate(double ir);  //Setting balance
