@@ -36,7 +36,7 @@ public:
 
 	void virtual withdraw(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 
-	std::vector<Account*> open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount);
+	Account* open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount);
 };
 
 class InterestEarning

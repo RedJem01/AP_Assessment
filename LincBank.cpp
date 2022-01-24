@@ -65,6 +65,13 @@ int main()
 			}
 			else if (command.compare("open") == 0)
 			{
+				//Checking if there are 3 values inputted
+				if (parameters.size() != 3)
+				{
+					std::cout << "Please only input 3 values." << std::endl;
+					continue;
+				}
+
 				//Checking if the amount value has only 2 or less decimal spaces
 				std::vector<char> decimalCheck;
 				bool pointCheck = false;
@@ -92,117 +99,109 @@ int main()
 				}
 
 				std::string type;
-
-				//If current account
-				if (parameters[1] == "1")
+				try
 				{
-					bool loop = false;;
-					//Looping through the list of opened accounts
-					//for (int i = 0; i < openedAccounts.size(); i++)
-					//{
-					//	//If any are current accounts
-					//	if (openedAccounts[i]->getType() == "c")
-					//	{
-					//		std::cout << "A current account already exists." << std::endl;
-					//		loop = true;
-					//	}
-					//}
-					//if (loop == true)
-					//{
-					//	continue;
-					//}
-
-					bool found = findType("c", openedAccounts);
-					if (found == true)
+					//If current account/////////////////////////////////////////////////////////////////
+					if (parameters[1] == "1")
 					{
-						continue;
+						bool found = findType("c", openedAccounts);
+						if (found == true)
+						{
+							std::cout << "A current account already exists." << std::endl;
+							continue;
+						}
+
+
+						//If the amount is less than 0
+						if (stoi(parameters[2]) < 0)
+						{
+							std::cout << "Please enter a number above or equal to 0." << std::endl;
+							continue;
+						}
+
+						type = "c";
+
+						//Opening new current account
+						Account* c = new Current();
+
+						c = c->open(type, c, openedAccounts, index, stoi(parameters[2]));
+
+						openedAccounts.emplace_back(c);
+
+						delete c;
+
+						std::cout << "A current account has been opened with a balance of " << parameters[2] << " pounds." << std::endl;
 					}
-					
-
-					//If the amount is less than 0
-					if (stoi(parameters[2]) < 0)
+					//If savings account////////////////////////////////////////////////////////////////
+					else if (parameters[1] == "2")
 					{
-						std::cout << "Please enter a number above or equal to 0." << std::endl;
-						continue;
+						//If the amount is less than 0
+						if (stoi(parameters[2]) < 0)
+						{
+							std::cout << "Please enter a number above or equal to 0." << std::endl;
+							continue;
+						}
+
+						type = "s";
+
+						//Open new savings account
+						Account* s = new Savings();
+
+						s = s->open(type, s, openedAccounts, index, stoi(parameters[2]));
+
+						openedAccounts.emplace_back(s);
+
+						delete s;
+
+						std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 					}
-
-					type = "c";
-
-					//Opening new current account
-					Account* c = new Current();
-					
-					openedAccounts = c->open(type, c, openedAccounts, index, stoi(parameters[2]));
-
-					delete c;
-				
-					std::cout << "A current account has been opened with a balance of " <<parameters[2] << " pounds." << std::endl;
-				}
-				//If savings account
-				else if (parameters[1] == "2")
-				{
-					//If the amount is less than 0
-					if (stoi(parameters[2]) < 0)
+					//If ISA account//////////////////////////////////////////////////
+					else if (parameters[1] == "3")
 					{
-						std::cout << "Please enter a number above or equal to 0." << std::endl;
-						continue;
-					}
-
-					type = "s";
-
-					//Open new savings account
-					Account* s = new Savings();
-					
-					openedAccounts = s->open(type, s, openedAccounts, index, stoi(parameters[2]));
-
-					delete s;
-
-					std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
-				}
-				//If ISA account
-				else if (parameters[1] == "3")
-				{
-					bool loop = false;
-					//Looping through the list of opened accounts
-					for (int i = 0; i < openedAccounts.size(); i++)
-					{
-						//If any are current accounts
-						if (openedAccounts[i]->getType() == "i")
+						bool found = findType("c", openedAccounts);
+						if (found == true)
 						{
 							std::cout << "An ISA account already exists." << std::endl;
-							loop = true;
+							continue;
 						}
+
+
+						if (stoi(parameters[2]) < 1000)
+						{
+							std::cout << "That is not over 1000 pounds. Please input an amount over 1000 pounds." << std::endl;
+							continue;
+						}
+
+						type = "i";
+
+						//Opening new ISA account through savings
+						Account* i = new Savings();
+						i = i->open(type, i, openedAccounts, index, stoi(parameters[2]));
+
+						openedAccounts.emplace_back(i);
+
+						delete i;
+
+						std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 					}
-					if (loop == true)
+					//If not 1, 2 or 3///////////////////////////////////////////////////////
+					else
 					{
-						continue;
+						std::cout << "Please only input 1, 2 or 3." << std::endl;
 					}
-
-
-					if (stoi(parameters[2]) < 1000)
-					{
-						std::cout << "That is not over 1000 pounds. Please input an amount over 1000 pounds." << std::endl;
-						continue;
-					}
-
-					type = "i";
-
-					//Opening new ISa account through savings
-					Account* i = new Savings();
-					openedAccounts = i -> open(type, i, openedAccounts, index, stoi(parameters[2]));
-
-					delete i;
-
-					std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
-				//If not 1, 2 or 3
-				else
+				catch (std::bad_alloc)
 				{
-					std::cout << "Please only input 1, 2 or 3." << std::endl;
+					std::cout << "Bad alloc error" << std::endl;
 				}
 			}
 			else if (command.compare("view") == 0)
 			{
-
+			//Checking if there are 1 or 2 values inputted
+			if (parameters.size() != 2 or parameters.size() != 1)
+			{
+				continue;
+			}
 				//Display an account according to an index (starting from 1)
 				int viewIndex = stoi(parameters[1]) + 1;
 				int count = 0;
@@ -232,21 +231,7 @@ int main()
 						//Looping through the transactions of an account and output all info from each transaction
 						for (int j = 0; j < ahistory.size(); j++)
 						{
-							std::string transacType = ahistory[j]->getDesc();
-							if (transacType == "id")
-							{
-								std::cout << "Initial deposit" << std::endl;
-							}
-							else if (transacType == "d")
-							{
-								std::cout << "Deposit" << std::endl;
-							}
-							else
-							{
-								std::cout << "Withdraw" << std::endl;
-							}
-							std::cout << "Time:" << ahistory[j]->getTimeStamp() << std::endl;
-							std::cout << "Value:" << ahistory[j]->getValue() << std::endl;
+							ahistory[j]->toString();
 						}
 					}
 					else
@@ -302,6 +287,11 @@ int main()
 			}
 			else if (command.compare("withdraw") == 0)
 			{
+				//Checking if there are 3 values inputted
+				if (parameters.size() != 3)
+				{
+					continue;
+				}
 				//Checking if the amount value has only 2 or less decimal spaces
 				std::vector<char> decimalCheck;
 				bool pointCheck = false;
@@ -395,6 +385,11 @@ int main()
 			}
 			else if (command.compare("deposit") == 0)
 			{
+				//Checking if there are 3 values inputted
+				if (parameters.size() != 3)
+				{
+					continue;
+				}
 				//Checking if the amount value has only 2 or less decimal spaces
 				std::vector<char> decimalCheck;
 				bool pointCheck = false;
@@ -465,6 +460,11 @@ int main()
 			}
 			else if (command.compare("transfer") == 0)
 			{
+				//Checking if there are 4 values inputted
+				if (parameters.size() != 4)
+				{
+					continue;
+				}
 				if (parameters[1] == parameters[2])
 				{
 					std::cout << "Those indexes are the same. Please choose two different indexes." << std::endl;
@@ -606,6 +606,11 @@ int main()
 			}
 			else if (command.compare("project") == 0)
 			{
+				//Checking if there are 3 values inputted
+				if (parameters.size() != 3)
+				{
+					continue;
+				}
 				//Compute compound interest t years into the future
 				int count = 0;
 				bool loop;
@@ -658,6 +663,11 @@ int main()
 			}
 			else if (command.compare("search") == 0)
 			{
+				//Checking if there are 3 values inputted
+				if (parameters.size() != 3)
+				{
+					continue;
+				}
 				//allow users to search their account history for a transaction
 				int count = 0;
 				int count2 = 0;
@@ -713,6 +723,11 @@ int main()
 			}
 			else if (command.compare("add") == 0)
 			{
+				//Checking if there are 3 values inputted
+				if (parameters.size() != 3)
+				{
+					continue;
+				}
 				if (parameters[1] == parameters[2])
 				{
 					std::cout << "Those indexes are the same. Please choose two different indexes." << std::endl;

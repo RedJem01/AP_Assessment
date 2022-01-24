@@ -1,6 +1,13 @@
 #include <iostream>
 #include "transaction.h"
 
+//Transaction::Transaction(std::string a, std::string b, double c)
+//{
+//	desc = a;
+//	timestamp = b;
+//	value = c;
+//}
+
 void Transaction::setDesc(std::string d)   //Setting desc
 {
 	desc = d;
@@ -30,6 +37,6 @@ double Transaction::getValue()    //Getting value
 
 void Transaction::toString()
 {
-	std::cout << "1" << std::endl;
+	std::cout << "-" << desc << value << "pounds, Date: " << timestamp << std::endl;
 }
 
