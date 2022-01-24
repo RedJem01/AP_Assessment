@@ -7,7 +7,7 @@
 #include "Transaction.h"
 
 //Account class
-Account::Account(double a, int b, std::string c)
+Account::Account(double a, int b, int c)
 {
 	balance = a;
 	index = b;
@@ -39,12 +39,12 @@ std::vector<Transaction*> Account::getHistory()   //Getting history
 	return history;
 }
 
-void Account::setType(std::string t)
+void Account::setType(int t)
 {
 	type = t;
 }
 
-std::string Account::getType()
+int Account::getType()
 {
 	return type;
 }
@@ -59,7 +59,7 @@ int Account::getIndex()
 	return index;
 }
 
-Account* Account::open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
+Account* Account::open(int type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
 {
 	//Setting index
 	index += 1;

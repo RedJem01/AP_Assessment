@@ -7,11 +7,11 @@ class Account
 private:
 	double balance = 0;
 	std::vector<Transaction*> history;
-	std::string type;
+	int type;
 	int index = 0;
 
 public:
-	Account(double a = 0, int b = 0, std::string = "");
+	Account(double a = 0, int b = 0, int c = 0);
 
 	Account& operator + (Account& obj);
 
@@ -23,9 +23,9 @@ public:
 
 	std::vector<Transaction*> getHistory();   //Getting history
 
-	void setType(std::string t);  //Setting type
+	void setType(int t);  //Setting type
 
-	std::string getType();  //Getting type
+	int getType();  //Getting type
 
 	void setIndex(int i); //Setting index
 
@@ -36,7 +36,7 @@ public:
 
 	void virtual withdraw(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 
-	Account* open(std::string type, Account* c, std::vector<Account*> openedAccounts, int index, int amount);
+	Account* open(int type, Account* c, std::vector<Account*> openedAccounts, int index, int amount);
 };
 
 class InterestEarning

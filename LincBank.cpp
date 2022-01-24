@@ -7,29 +7,14 @@
 #include "Account.h"
 #include "Transaction.h"
 
-bool findType(std::string types, std::vector<Account*> openedAccounts)
-{
-	auto result = std::find_if(openedAccounts.begin(), openedAccounts.end(), [&](Account* it) 
-	{
-		return it->getType() == types;
-	});
-	if (result == openedAccounts.end()) 
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-
-
 int main()
 {
 	std::vector <std::string> parameters;
 	std::string userCommand;
 	std::vector <Account*> openedAccounts;
 	int index = -1;
+	bool currentExist = false;
+	bool isaExist = false;
 
 	std::cout << "~~~~~~~~~~~~ Welcome to LincBank! ~~~~~~~~~~~~~~" << std::endl;
 	std::cout << "~~~ Please type options for more information ~~~" << std::endl;
@@ -98,19 +83,18 @@ int main()
 					continue;
 				}
 
-				std::string type;
+				int type;
 				try
 				{
 					//If current account/////////////////////////////////////////////////////////////////
 					if (parameters[1] == "1")
 					{
-						bool found = findType("c", openedAccounts);
-						if (found == true)
+
+						if (currentExist == true)
 						{
 							std::cout << "A current account already exists." << std::endl;
 							continue;
 						}
-
 
 						//If the amount is less than 0
 						if (stoi(parameters[2]) < 0)
@@ -119,7 +103,7 @@ int main()
 							continue;
 						}
 
-						type = "c";
+						type = 1;
 
 						//Opening new current account
 						Account* c = new Current();
@@ -131,6 +115,7 @@ int main()
 						delete c;
 
 						std::cout << "A current account has been opened with a balance of " << parameters[2] << " pounds." << std::endl;
+						currentExist = true;
 					}
 					//If savings account////////////////////////////////////////////////////////////////
 					else if (parameters[1] == "2")
@@ -142,7 +127,7 @@ int main()
 							continue;
 						}
 
-						type = "s";
+						type = 2;
 
 						//Open new savings account
 						Account* s = new Savings();
@@ -158,13 +143,11 @@ int main()
 					//If ISA account//////////////////////////////////////////////////
 					else if (parameters[1] == "3")
 					{
-						bool found = findType("c", openedAccounts);
-						if (found == true)
+						if (isaExist == true)
 						{
 							std::cout << "An ISA account already exists." << std::endl;
 							continue;
 						}
-
 
 						if (stoi(parameters[2]) < 1000)
 						{
@@ -172,7 +155,7 @@ int main()
 							continue;
 						}
 
-						type = "i";
+						type = 3;
 
 						//Opening new ISA account through savings
 						Account* i = new Savings();
@@ -183,6 +166,7 @@ int main()
 						delete i;
 
 						std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
+						isaExist = true;
 					}
 					//If not 1, 2 or 3///////////////////////////////////////////////////////
 					else
@@ -197,13 +181,20 @@ int main()
 			}
 			else if (command.compare("view") == 0)
 			{
-			//Checking if there are 1 or 2 values inputted
-			if (parameters.size() != 2 or parameters.size() != 1)
-			{
-				continue;
-			}
+				//Checking if there are 1 or 2 values inputted
+				if ((parameters.size() == 2))
+				{
+				}
+				else if (parameters.size() == 1)
+				{
+				}
+				else
+				{
+					std::cout << "Please only put 1 or 2 inputs" << std::endl;
+					continue;
+				}
 				//Display an account according to an index (starting from 1)
-				int viewIndex = stoi(parameters[1]) + 1;
+				int viewIndex = stoi(parameters[1]) - 1;
 				int count = 0;
 
 				//looping through account list and finding the index
@@ -211,12 +202,12 @@ int main()
 				{
 					if (openedAccounts[i]->getIndex() == viewIndex)
 					{
-						std::string accountType = openedAccounts[i]->getType();
-						if (accountType == "c")
+						int accountType = openedAccounts[i]->getType();
+						if (accountType == 1)
 						{
 							std::cout << "Current account" << std::endl;
 						}
-						else if (accountType == "s")
+						else if (accountType == 2)
 						{
 							std::cout << "Savings account" << std::endl;
 						}
@@ -241,17 +232,17 @@ int main()
 				}
 
 				//If the input was not an index that exists then display all of the accounts
-				if (count = openedAccounts.size())
+				if (count == openedAccounts.size())
 				{
 					//Loop through account list and output all info from each account
 					for (int i = 0; i < openedAccounts.size(); i++)
 					{
-						std::string accountType = openedAccounts[i]->getType();
-						if (accountType == "c")
+						int accountType = openedAccounts[i]->getType();
+						if (accountType == 1)
 						{
 							std::cout << "Current account" << std::endl;
 						}
-						else if (accountType == "s")
+						else if (accountType == 2)
 						{
 							std::cout << "Savings account" << std::endl;
 						}
@@ -336,7 +327,7 @@ int main()
 						//If amount is positive
 						else
 						{
-							if (openedAccounts[i]->getType() == "c")
+							if (openedAccounts[i]->getType() == 1)
 							{
 								Current* c = new Current();
 
@@ -427,7 +418,7 @@ int main()
 					{
 						if (stoi(parameters[2]) > 0)
 						{
-							if (openedAccounts[i]->getType() == "c")
+							if (openedAccounts[i]->getType() == 1)
 							{
 								Current* c = new Current();
 								c->deposit(openedAccounts, i, stoi(parameters[2]));
@@ -525,7 +516,7 @@ int main()
 									//Withdrawing
 
 									//If account type is current
-									if (openedAccounts[i]->getType() == "c")
+									if (openedAccounts[i]->getType() == 1)
 									{
 										Current* c = new Current();
 
@@ -564,7 +555,7 @@ int main()
 									//Depositing
 
 									//If account type is current
-									if (openedAccounts[j]->getType() == "c")
+									if (openedAccounts[j]->getType() == 1)
 									{
 										Current* c = new Current();
 										c->deposit(openedAccounts, j, stoi(parameters[3]));
@@ -625,11 +616,11 @@ int main()
 					{
 						Savings* s = new Savings();
 						s->setBalance(openedAccounts[i]->getBalance());
-						if (openedAccounts[i]->getType() == "s")
+						if (openedAccounts[i]->getType() == 2)
 						{
 							s->setInterestRate(0.85);
 						}
-						else if (openedAccounts[i]->getType() == "c")
+						else if (openedAccounts[i]->getType() == 1)
 						{
 							std::cout << "The account needs to be a savings account" << std::endl;
 							loop = true;
