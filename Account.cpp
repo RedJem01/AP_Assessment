@@ -9,7 +9,7 @@
 //Account class
 Account& Account::operator + (Account& obj)
 {
-	this->setBalance(this->getBalance() + this->getBalance());
+	this->setBalance(this->getBalance() + obj.getBalance());
 	return *this;
 }
 

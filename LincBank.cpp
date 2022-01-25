@@ -599,7 +599,8 @@ int main()
 					{
 						if (openedAccounts[i]->getType() == 2)
 						{
-							Savings* s = (Savings*)&openedAccounts[i];
+							Account* a = openedAccounts[i];
+							Savings* s = (Savings*)a;
 							s->setInterestRate(0.85);
 							//Calling the computeInterest function
 							finalAmount = s->computeInterest(s->getInterestRate(), s->getBalance(), stoi(parameters[2]));
@@ -613,7 +614,8 @@ int main()
 						}
 						else
 						{
-							Savings* i = (Savings*)&openedAccounts[i];
+							Account* a = openedAccounts[i];
+							Savings* i = (Savings*)a;
 							i->setInterestRate(1.15);
 							//Calling the computeInterest function
 							finalAmount = i->computeInterest(i->getInterestRate(), i->getBalance(), stoi(parameters[2]));
@@ -726,7 +728,7 @@ int main()
 							if (addIndex2 == openedAccounts[j]->getIndex())
 							{
 								Account* a1 = openedAccounts[i];
-								Account* a2 = openedAccounts[i];
+								Account* a2 = openedAccounts[j];
 								Account& a = *a1 + *a2;
 								std::cout << "The sum of the balances from those accounts is: " << a.getBalance() << std::endl;
 							}
