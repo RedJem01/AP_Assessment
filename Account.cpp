@@ -7,13 +7,6 @@
 #include "Transaction.h"
 
 //Account class
-Account::Account(double a, int b, int c)
-{
-	balance = a;
-	index = b;
-	type = c;
-}
-
 Account& Account::operator + (Account& obj)
 {
 	this->setBalance(this->getBalance() + this->getBalance());
@@ -59,29 +52,14 @@ int Account::getIndex()
 	return index;
 }
 
-Account* Account::open(int type, Account* c, std::vector<Account*> openedAccounts, int index, int amount)
+Account* Account::open(Account* c, std::vector<Account*> openedAccounts, int amount)
 {
-	//Setting index
-	index += 1;
-	c->setIndex(index);
-
-	//Setting type
-	c->setType(type);
-
-	//Setting balance
-	c->setBalance(amount);
-
-	//Making a new transaction object
-	Transaction* t = new Transaction();
-
 	//Finding current date and time
 	time_t now = time(0);
 	char* dt = ctime(&now);
 
-	//Setting attributes for transaction
-	t->setDesc("id");
-	t->setTimeStamp(dt);
-	t->setValue(amount);
+	//Making a new transaction object
+	Transaction* t = new Transaction("id", dt, amount);
 
 	//Adding transaction details to history
 	c->setHistory(t);
@@ -94,115 +72,6 @@ Account* Account::open(int type, Account* c, std::vector<Account*> openedAccount
 
 
 
-//Current class
-Current::Current(int a)
-{
-	overdraft = a;
-}
-
-void Current::deposit(std::vector <Account*> openedAccounts, int place, double amount)
-{
-	//Finding current date and time
-	time_t now = time(0);
-	char* dt = ctime(&now);
-
-	//Adding the amount to the account balance
-	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() + amount);
-
-	//Creating a transaction object to add to history
-	Transaction* t = new Transaction();
-	t->setDesc("d");
-	t->setTimeStamp(dt);
-	t->setValue(amount);
-	openedAccounts[place]->setHistory(t);
-}
-
-void Current::withdraw(std::vector <Account*> openedAccounts, int place, double amount)
-{
-	//Finding current date and time
-	time_t now = time(0);
-	char* dt = ctime(&now);
-
-	//Minus the amount from the balance
-	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() - amount);
-
-	//Creating a transaction object to add to history
-	Transaction* t = new Transaction();
-	t->setDesc("d");
-	t->setTimeStamp(dt);
-	t->setValue(amount);
-	openedAccounts[place]->setHistory(t);
-}
 
 
 
-
-//Savings class
-Savings::Savings(double a, bool b)
-{
-	interestRate = a;
-	isa = b;
-}
-
-void Savings::setInterestRate(double ir)   //Setting balance
-{
-	interestRate = ir;
-}
-double Savings::getInterestRate()    //Getting balance
-{
-	return interestRate;
-}
-
-void Savings::setIsa(bool i)   //Setting balance
-{
-	isa = i;
-}
-int Savings::getIsa()    //Getting balance
-{
-	return isa;
-}
-
-double Savings::computeInterest(double interestRate, double balance, double time)
-{
-	double finalAmount;
-	double notimes = 12;
-	double nt = 12 * time;
-	//Middle of the brackets
-	double mid = (interestRate / notimes) + 1;
-	finalAmount = balance * (std::pow(mid, nt));
-	return finalAmount;
-}
-
-void Savings::deposit(std::vector <Account*> openedAccounts, int place, double amount)
-{
-	//Finding current date and time
-	time_t now = time(0);
-	char* dt = ctime(&now);
-
-	//Adding the amount to the account balance
-	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() + amount);
-
-	//Creating a transaction object to add to history
-	Transaction* t = new Transaction();
-	t->setDesc("d");
-	t->setTimeStamp(dt);
-	t->setValue(amount);
-	openedAccounts[place]->setHistory(t);
-}
-
-void Savings::withdraw(std::vector <Account*> openedAccounts, int place, double amount)
-{
-	//Finding current date and time
-	time_t now = time(0);
-	char* dt = ctime(&now);
-
-	//Minus the amount from the balance
-	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() - amount);
-
-	//Creating a transaction object to add to history
-	Transaction* t = new Transaction();
-	t->setDesc("d");
-	t->setTimeStamp(dt);
-	t->setValue(amount);
-	openedAccounts[place]->setHistory(t);
-}

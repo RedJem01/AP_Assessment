@@ -10,7 +10,7 @@ protected:
 	double value;
 
 public:
-	//Transaction(std::string a, std::string b, double c);
+	Transaction(std::string a, std::string b, double c) :desc(a), timestamp(b), value(c) {}
 
 	void setDesc(std::string d);   //Setting desc
 

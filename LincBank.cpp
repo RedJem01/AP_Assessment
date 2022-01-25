@@ -6,6 +6,8 @@
 #include <ctime>
 #include "Account.h"
 #include "Transaction.h"
+#include "Savings.h"
+#include "Current.h"
 
 int main()
 {
@@ -46,7 +48,7 @@ int main()
 			if (command.compare("options") == 0)
 			{
 				// display the various commands to the user
-				std::cout << "open type initial_deposit: open a current (1), savings (2) or ISA (3) account \n view [index]: view balance and recent transactions \n withdraw sum: withdraw funds from most recently viewed account \n deposit sum: deposit funds into most recently viewed account \n transfer src dest sum: transfer funds between accounts \n project years: project balance forward in time \n exit: close this application \n options: view these options again" << std::endl;
+				std::cout << "open type initial_deposit: open a current (1), savings (2) or ISA (3) account  open (type) (amount)\n view [index]: view balance and recent transactions \n withdraw sum: withdraw funds from most recently viewed account \n deposit sum: deposit funds into most recently viewed account \n transfer src dest sum: transfer funds between accounts \n project years: project balance forward in time \n exit: close this application \n options: view these options again" << std::endl;
 			}
 			else if (command.compare("open") == 0)
 			{
@@ -97,18 +99,19 @@ int main()
 						}
 
 						//If the amount is less than 0
-						if (stoi(parameters[2]) < 0)
+						if (stod(parameters[2]) < 0)
 						{
 							std::cout << "Please enter a number above or equal to 0." << std::endl;
 							continue;
 						}
 
 						type = 1;
+						index += 1;
 
 						//Opening new current account
-						Account* c = new Current();
+						Account* c = new Current(stod(parameters[2]), type, index);
 
-						c = c->open(type, c, openedAccounts, index, stoi(parameters[2]));
+						c = c->open(c, openedAccounts, stod(parameters[2]));
 
 						openedAccounts.emplace_back(c);
 
@@ -121,18 +124,19 @@ int main()
 					else if (parameters[1] == "2")
 					{
 						//If the amount is less than 0
-						if (stoi(parameters[2]) < 0)
+						if (stod(parameters[2]) < 0)
 						{
 							std::cout << "Please enter a number above or equal to 0." << std::endl;
 							continue;
 						}
 
 						type = 2;
+						index += 1;
 
 						//Open new savings account
-						Account* s = new Savings();
+						Account* s = new Savings(stod(parameters[2]), type, index);
 
-						s = s->open(type, s, openedAccounts, index, stoi(parameters[2]));
+						s = s->open(s, openedAccounts, stod(parameters[2]));
 
 						openedAccounts.emplace_back(s);
 
@@ -156,10 +160,11 @@ int main()
 						}
 
 						type = 3;
+						index += 1;
 
 						//Opening new ISA account through savings
-						Account* i = new Savings();
-						i = i->open(type, i, openedAccounts, index, stoi(parameters[2]));
+						Account* i = new Savings(stod(parameters[2]), type, index);
+						i = i->open(i, openedAccounts, stod(parameters[2]));
 
 						openedAccounts.emplace_back(i);
 
@@ -200,6 +205,7 @@ int main()
 				//looping through account list and finding the index
 				for (int i = 0; i < openedAccounts.size(); i++)
 				{
+					int accountIndex = openedAccounts[i]->getIndex();
 					if (openedAccounts[i]->getIndex() == viewIndex)
 					{
 						int accountType = openedAccounts[i]->getType();
@@ -329,7 +335,6 @@ int main()
 						{
 							if (openedAccounts[i]->getType() == 1)
 							{
-								Current* c = new Current();
 
 								//If amount is more than balance 
 								if (openedAccounts[i]->getBalance() < stoi(parameters[2]))
@@ -339,15 +344,13 @@ int main()
 								//If amount is less than balance
 								else
 								{
-									c->withdraw(openedAccounts, i, stoi(parameters[2]));
-									delete c;
+									
+									openedAccounts[i]->withdraw(openedAccounts, i, stoi(parameters[2]));
 									std::cout << parameters[2] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 								}
 							}
 							else
 							{
-								Savings* s = new Savings();
-
 								//If amount is more than balance 
 								if (openedAccounts[i]->getBalance() < stoi(parameters[2]))
 								{
@@ -356,8 +359,8 @@ int main()
 								//If amount is less than balance
 								else
 								{
-									s->withdraw(openedAccounts, i, stoi(parameters[2]));
-									delete s;
+									Current* c = (Current*)openedAccounts[i];
+									c->withdraw(openedAccounts, i, stoi(parameters[2]));
 									std::cout << parameters[2] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 								}
 							}
@@ -420,16 +423,12 @@ int main()
 						{
 							if (openedAccounts[i]->getType() == 1)
 							{
-								Current* c = new Current();
-								c->deposit(openedAccounts, i, stoi(parameters[2]));
-								delete c;
+								openedAccounts[i]->deposit(openedAccounts, i, stoi(parameters[2]));
 								std::cout << parameters[2] << " pounds has been deposited into account " << parameters[1] << std::endl;
 							}
 							else
 							{
-								Savings* s = new Savings();
-								s->deposit(openedAccounts, i, stoi(parameters[2]));
-								delete s;
+								openedAccounts[i]->deposit(openedAccounts, i, stoi(parameters[2]));
 								std::cout << parameters[2] << " pounds has been deposited into account " << parameters[1] << std::endl;
 							}
 						}
@@ -518,7 +517,6 @@ int main()
 									//If account type is current
 									if (openedAccounts[i]->getType() == 1)
 									{
-										Current* c = new Current();
 
 										//If amount is more than balance 
 										if (openedAccounts[i]->getBalance() < stoi(parameters[3]))
@@ -528,15 +526,13 @@ int main()
 										//If amount is less than balance
 										else
 										{
-											c->withdraw(openedAccounts, i, stoi(parameters[3]));
-											delete c;
+											openedAccounts[i]->withdraw(openedAccounts, i, stoi(parameters[3]));
 											std::cout << parameters[3] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 										}
 									}
 									//If account type is savings
 									else
 									{
-										Savings* s = new Savings();
 
 										//If amount is more than balance 
 										if (openedAccounts[i]->getBalance() < stoi(parameters[3]))
@@ -546,8 +542,7 @@ int main()
 										//If amount is less than balance
 										else
 										{
-											s->withdraw(openedAccounts, i, stoi(parameters[3]));
-											delete s;
+											openedAccounts[i]->withdraw(openedAccounts, i, stoi(parameters[3]));
 											std::cout << parameters[3] << " pounds has been withdrawn from account " << parameters[1] << std::endl;
 										}
 									}
@@ -557,17 +552,13 @@ int main()
 									//If account type is current
 									if (openedAccounts[j]->getType() == 1)
 									{
-										Current* c = new Current();
-										c->deposit(openedAccounts, j, stoi(parameters[3]));
-										delete c;
+										openedAccounts[i]->deposit(openedAccounts, j, stoi(parameters[3]));
 										std::cout << parameters[3] << " pounds has been deposited into account " << parameters[2] << std::endl;
 									}
 									//If account type is savings
 									else
 									{
-										Savings* s = new Savings();
-										s->deposit(openedAccounts, j, stoi(parameters[3]));
-										delete s;
+										openedAccounts[i]->deposit(openedAccounts, j, stoi(parameters[3]));
 										std::cout << parameters[3] << " pounds has been deposited into account " << parameters[2] << std::endl;
 									}
 								}
@@ -614,11 +605,10 @@ int main()
 					//If it is in the list
 					if (index == openedAccounts[i]->getIndex())
 					{
-						Savings* s = new Savings();
-						s->setBalance(openedAccounts[i]->getBalance());
+						openedAccounts[i]->setBalance(openedAccounts[i]->getBalance());
 						if (openedAccounts[i]->getType() == 2)
 						{
-							s->setInterestRate(0.85);
+							//openedAccounts[i]->setInterestRate(0.85);
 						}
 						else if (openedAccounts[i]->getType() == 1)
 						{
@@ -628,13 +618,13 @@ int main()
 						}
 						else
 						{
-							s->setInterestRate(1.15);
+							//openedAccounts[i]->setInterestRate(1.15);
 						}
 
 						//Calling the computeInterest function
-						double finalAmount = s->computeInterest(s->getInterestRate(), s->getBalance(), stoi(parameters[2]));
-						delete s;
-						std::cout << "Your balance in " << parameters[2] << " years will be " << finalAmount << " pounds." << std::endl;
+						//double finalAmount = openedAccounts[i]->computeInterest(s->getInterestRate(), s->getBalance(), stoi(parameters[2]));
+						//delete s;
+						//std::cout << "Your balance in " << parameters[2] << " years will be " << finalAmount << " pounds." << std::endl;
 					}
 					else
 					{

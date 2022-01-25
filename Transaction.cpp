@@ -1,12 +1,7 @@
 #include <iostream>
 #include "transaction.h"
 
-//Transaction::Transaction(std::string a, std::string b, double c)
-//{
-//	desc = a;
-//	timestamp = b;
-//	value = c;
-//}
+
 
 void Transaction::setDesc(std::string d)   //Setting desc
 {
