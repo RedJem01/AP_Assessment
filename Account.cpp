@@ -52,19 +52,18 @@ int Account::getIndex()
 	return index;
 }
 
-Account* Account::open(Account* c, std::vector<Account*> openedAccounts, int amount)
+Account* Account::open(Account* c, std::vector<Account*> openedAccounts, double amount)
 {
 	//Finding current date and time
 	time_t now = time(0);
 	char* dt = ctime(&now);
 
 	//Making a new transaction object
-	Transaction* t = new Transaction("id", dt, amount);
+	Transaction* t = new Transaction(" id", dt, amount);
 
 	//Adding transaction details to history
 	c->setHistory(t);
 
-	delete t;
 
 	return c;
 }

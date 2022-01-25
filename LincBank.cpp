@@ -48,7 +48,7 @@ int main()
 			if (command.compare("options") == 0)
 			{
 				// display the various commands to the user
-				std::cout << "open type initial_deposit: open a current (1), savings (2) or ISA (3) account  open (type) (amount)\n view [index]: view balance and recent transactions \n withdraw sum: withdraw funds from most recently viewed account \n deposit sum: deposit funds into most recently viewed account \n transfer src dest sum: transfer funds between accounts \n project years: project balance forward in time \n exit: close this application \n options: view these options again" << std::endl;
+				std::cout << "open (type) (initial_deposit): open a current (1), savings (2) or ISA (3) account  \n view (index): view balance and recent transactions \n withdraw (index) (sum): withdraw funds from most recently viewed account \n deposit (index) (sum): deposit funds into most recently viewed account \n transfer (index1) (index2) (sum): transfer funds between accounts \n project (index) (years): project balance forward in time \n exit: close this application \n options: view these options again" << std::endl;
 			}
 			else if (command.compare("open") == 0)
 			{
@@ -86,103 +86,95 @@ int main()
 				}
 
 				int type;
-				try
+				//If current account/////////////////////////////////////////////////////////////////
+				if (parameters[1] == "1")
 				{
-					//If current account/////////////////////////////////////////////////////////////////
-					if (parameters[1] == "1")
+
+					if (currentExist == true)
 					{
-
-						if (currentExist == true)
-						{
-							std::cout << "A current account already exists." << std::endl;
-							continue;
-						}
-
-						//If the amount is less than 0
-						if (stod(parameters[2]) < 0)
-						{
-							std::cout << "Please enter a number above or equal to 0." << std::endl;
-							continue;
-						}
-
-						type = 1;
-						index += 1;
-
-						//Opening new current account
-						Account* c = new Current(stod(parameters[2]), type, index);
-
-						c = c->open(c, openedAccounts, stod(parameters[2]));
-
-						openedAccounts.emplace_back(c);
-
-						delete c;
-
-						std::cout << "A current account has been opened with a balance of " << parameters[2] << " pounds." << std::endl;
-						currentExist = true;
+						std::cout << "A current account already exists." << std::endl;
+						continue;
 					}
-					//If savings account////////////////////////////////////////////////////////////////
-					else if (parameters[1] == "2")
+
+					//If the amount is less than 0
+					if (stod(parameters[2]) < 0)
 					{
-						//If the amount is less than 0
-						if (stod(parameters[2]) < 0)
-						{
-							std::cout << "Please enter a number above or equal to 0." << std::endl;
-							continue;
-						}
-
-						type = 2;
-						index += 1;
-
-						//Open new savings account
-						Account* s = new Savings(stod(parameters[2]), type, index);
-
-						s = s->open(s, openedAccounts, stod(parameters[2]));
-
-						openedAccounts.emplace_back(s);
-
-						delete s;
-
-						std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
+						std::cout << "Please enter a number above or equal to 0." << std::endl;
+						continue;
 					}
-					//If ISA account//////////////////////////////////////////////////
-					else if (parameters[1] == "3")
-					{
-						if (isaExist == true)
-						{
-							std::cout << "An ISA account already exists." << std::endl;
-							continue;
-						}
 
-						if (stoi(parameters[2]) < 1000)
-						{
-							std::cout << "That is not over 1000 pounds. Please input an amount over 1000 pounds." << std::endl;
-							continue;
-						}
+					type = 1;
+					index += 1;
 
-						type = 3;
-						index += 1;
+					//Opening new current account
+					Account* c = new Current(stod(parameters[2]), type, index);
 
-						//Opening new ISA account through savings
-						Account* i = new Savings(stod(parameters[2]), type, index);
-						i = i->open(i, openedAccounts, stod(parameters[2]));
+					c = c->open(c, openedAccounts, stod(parameters[2]));
 
-						openedAccounts.emplace_back(i);
+					openedAccounts.push_back(c);
 
-						delete i;
 
-						std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
-						isaExist = true;
-					}
-					//If not 1, 2 or 3///////////////////////////////////////////////////////
-					else
-					{
-						std::cout << "Please only input 1, 2 or 3." << std::endl;
-					}
+					int accountType = openedAccounts[0]->getType();
+
+					std::cout << "A current account has been opened with a balance of " << parameters[2] << " pounds." << std::endl;
+					currentExist = true;
 				}
-				catch (std::bad_alloc)
+				//If savings account////////////////////////////////////////////////////////////////
+				else if (parameters[1] == "2")
 				{
-					std::cout << "Bad alloc error" << std::endl;
+					//If the amount is less than 0
+					if (stod(parameters[2]) < 0)
+					{
+						std::cout << "Please enter a number above or equal to 0." << std::endl;
+						continue;
+					}
+
+					type = 2;
+					index += 1;
+
+					//Open new savings account
+					Account* s = new Savings(stod(parameters[2]), type, index);
+
+					s = s->open(s, openedAccounts, stod(parameters[2]));
+
+					openedAccounts.push_back(s);
+
+					std::cout << "A savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
 				}
+				//If ISA account//////////////////////////////////////////////////
+				else if (parameters[1] == "3")
+				{
+					if (isaExist == true)
+					{
+						std::cout << "An ISA account already exists." << std::endl;
+						continue;
+					}
+
+					if (stoi(parameters[2]) < 1000)
+					{
+						std::cout << "That is not over 1000 pounds. Please input an amount over 1000 pounds." << std::endl;
+						continue;
+					}
+
+					type = 3;
+					index += 1;
+
+					//Opening new ISA account through savings
+					Account* i = new Savings(stod(parameters[2]), type, index);
+					i = i->open(i, openedAccounts, stod(parameters[2]));
+
+					openedAccounts.push_back(i);
+
+
+					std::cout << "An ISA savings account has been opened with an initial deposit of " << parameters[2] << " pounds." << std::endl;
+					isaExist = true;
+				}
+				//If not 1, 2 or 3///////////////////////////////////////////////////////
+				else
+				{
+					std::cout << "Please only input 1, 2 or 3." << std::endl;
+				}
+
 			}
 			else if (command.compare("view") == 0)
 			{
@@ -205,7 +197,6 @@ int main()
 				//looping through account list and finding the index
 				for (int i = 0; i < openedAccounts.size(); i++)
 				{
-					int accountIndex = openedAccounts[i]->getIndex();
 					if (openedAccounts[i]->getIndex() == viewIndex)
 					{
 						int accountType = openedAccounts[i]->getType();
@@ -595,7 +586,8 @@ int main()
 				}
 				//Compute compound interest t years into the future
 				int count = 0;
-				bool loop;
+				bool loop = false;
+				double finalAmount;
 
 				int index = stoi(parameters[1]) - 1;
 
@@ -605,10 +597,13 @@ int main()
 					//If it is in the list
 					if (index == openedAccounts[i]->getIndex())
 					{
-						openedAccounts[i]->setBalance(openedAccounts[i]->getBalance());
 						if (openedAccounts[i]->getType() == 2)
 						{
-							//openedAccounts[i]->setInterestRate(0.85);
+							Savings* s = (Savings*)&openedAccounts[i];
+							s->setInterestRate(0.85);
+							//Calling the computeInterest function
+							finalAmount = s->computeInterest(s->getInterestRate(), s->getBalance(), stoi(parameters[2]));
+
 						}
 						else if (openedAccounts[i]->getType() == 1)
 						{
@@ -618,13 +613,14 @@ int main()
 						}
 						else
 						{
-							//openedAccounts[i]->setInterestRate(1.15);
+							Savings* i = (Savings*)&openedAccounts[i];
+							i->setInterestRate(1.15);
+							//Calling the computeInterest function
+							finalAmount = i->computeInterest(i->getInterestRate(), i->getBalance(), stoi(parameters[2]));
+
 						}
 
-						//Calling the computeInterest function
-						//double finalAmount = openedAccounts[i]->computeInterest(s->getInterestRate(), s->getBalance(), stoi(parameters[2]));
-						//delete s;
-						//std::cout << "Your balance in " << parameters[2] << " years will be " << finalAmount << " pounds." << std::endl;
+						std::cout << "Your balance in " << parameters[2] << " years will be " << finalAmount << " pounds." << std::endl;
 					}
 					else
 					{

@@ -32,6 +32,6 @@ double Transaction::getValue()    //Getting value
 
 void Transaction::toString()
 {
-	std::cout << "-" << desc << value << "pounds, Date: " << timestamp << std::endl;
+	std::cout << "- " << desc << " " << value << " pounds, Date: " << timestamp << std::endl;
 }
 

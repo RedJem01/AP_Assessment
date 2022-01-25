@@ -5,7 +5,7 @@
 class Account
 {
 protected:
-	double balance = 0;
+	double balance;
 	std::vector<Transaction*> history;
 	int type;
 	int index;
@@ -38,7 +38,7 @@ public:
 
 	void virtual withdraw(std::vector <Account*> openedAccounts, int place, double amount) = 0;
 
-	Account* open(Account* c, std::vector<Account*> openedAccounts, int amount);
+	Account* open(Account* c, std::vector<Account*> openedAccounts, double amount);
 };
 
 class InterestEarning

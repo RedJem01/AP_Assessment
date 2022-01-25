@@ -16,7 +16,6 @@ public:
 		index = c;
 	}
 
-	Savings operator + (Savings& obj);
 
 	void setInterestRate(double ir);  //Setting balance
 

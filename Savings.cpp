@@ -46,7 +46,7 @@ void Savings::deposit(std::vector <Account*> openedAccounts, int place, double a
 	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() + amount);
 
 	//Creating a transaction object to add to history
-	Transaction* t = new Transaction("d", dt, amount);
+	Transaction* t = new Transaction(" d", dt, amount);
 	openedAccounts[place]->setHistory(t);
 }
 
@@ -60,6 +60,6 @@ void Savings::withdraw(std::vector <Account*> openedAccounts, int place, double 
 	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() - amount);
 
 	//Creating a transaction object to add to history
-	Transaction* t = new Transaction("w", dt, amount);
+	Transaction* t = new Transaction(" w", dt, amount);
 	openedAccounts[place]->setHistory(t);
 }

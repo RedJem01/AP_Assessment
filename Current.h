@@ -5,8 +5,6 @@
 class Current : public Account
 {
 public:
-	int overdraft;
-
 	Current(double a, int b, int c)
 	{
 		balance = a;
