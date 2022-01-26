@@ -9,6 +9,22 @@
 #include "Savings.h"
 #include "Current.h"
 
+bool findType(int types, std::vector<Account*> openedAccounts)
+{
+	auto result = std::find_if(openedAccounts.begin(), openedAccounts.end(), [&](Account* it)
+		{
+			return it->getType() == types;
+		});
+	if (result == openedAccounts.end())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
 int main()
 {
 	std::vector <std::string> parameters;
@@ -89,8 +105,8 @@ int main()
 				//If current account/////////////////////////////////////////////////////////////////
 				if (parameters[1] == "1")
 				{
-
-					if (currentExist == true)
+					bool found = findType(1, openedAccounts);
+					if (found == true)
 					{
 						std::cout << "A current account already exists." << std::endl;
 						continue;
@@ -117,7 +133,6 @@ int main()
 					int accountType = openedAccounts[0]->getType();
 
 					std::cout << "A current account has been opened with a balance of " << parameters[2] << " pounds." << std::endl;
-					currentExist = true;
 				}
 				//If savings account////////////////////////////////////////////////////////////////
 				else if (parameters[1] == "2")
@@ -144,7 +159,8 @@ int main()
 				//If ISA account//////////////////////////////////////////////////
 				else if (parameters[1] == "3")
 				{
-					if (isaExist == true)
+					bool found = findType(3, openedAccounts);
+					if (found == true)
 					{
 						std::cout << "An ISA account already exists." << std::endl;
 						continue;
