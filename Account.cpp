@@ -59,7 +59,7 @@ Account* Account::open(Account* c, std::vector<Account*> openedAccounts, double 
 	char* dt = ctime(&now);
 
 	//Making a new transaction object
-	Transaction* t = new Transaction(" id", dt, amount);
+	Transaction* t = new Transaction(1, dt, amount);
 
 	//Adding transaction details to history
 	c->setHistory(t);

@@ -3,11 +3,11 @@
 
 
 
-void Transaction::setDesc(std::string d)   //Setting desc
+void Transaction::setDesc(int d)   //Setting desc
 {
 	desc = d;
 }
-std::string Transaction::getDesc()    //Getting desc
+int Transaction::getDesc()    //Getting desc
 {
 	return desc;
 }
@@ -32,6 +32,18 @@ double Transaction::getValue()    //Getting value
 
 void Transaction::toString()
 {
-	std::cout << "- " << desc << " " << value << " pounds, Date: " << timestamp << std::endl;
+	if (desc == 1)
+	{
+		std::cout << "- " << "Initial deposit " << value << " pounds, Date: " << timestamp << std::endl;
+	}
+	else if (desc == 2)
+	{
+		std::cout << "- " << "Deposit " << value << " pounds, Date: " << timestamp << std::endl;
+	}
+	else
+	{
+		std::cout << "- " << "Withdrawal " << value << " pounds, Date: " << timestamp << std::endl;
+	}
+	
 }
 

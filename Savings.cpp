@@ -31,7 +31,7 @@ double Savings::computeInterest(double interestRate, double balance, double time
 	double notimes = 12;
 	double nt = 12 * time;
 	//Middle of the brackets
-	double mid = (interestRate / notimes) + 1;
+	double mid = ((interestRate / notimes) + 1);
 	finalAmount = balance * (std::pow(mid, nt));
 	return finalAmount;
 }
@@ -46,7 +46,7 @@ void Savings::deposit(std::vector <Account*> openedAccounts, int place, double a
 	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() + amount);
 
 	//Creating a transaction object to add to history
-	Transaction* t = new Transaction(" d", dt, amount);
+	Transaction* t = new Transaction(2, dt, amount);
 	openedAccounts[place]->setHistory(t);
 }
 
@@ -60,6 +60,6 @@ void Savings::withdraw(std::vector <Account*> openedAccounts, int place, double 
 	openedAccounts[place]->setBalance(openedAccounts[place]->getBalance() - amount);
 
 	//Creating a transaction object to add to history
-	Transaction* t = new Transaction(" w", dt, amount);
+	Transaction* t = new Transaction(3, dt, amount);
 	openedAccounts[place]->setHistory(t);
 }

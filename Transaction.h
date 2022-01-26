@@ -5,16 +5,16 @@
 class Transaction
 {
 protected:
-	std::string desc;
+	int desc;
 	std::string timestamp;
 	double value;
 
 public:
-	Transaction(std::string a, std::string b, double c) :desc(a), timestamp(b), value(c) {}
+	Transaction(int a, std::string b, double c) :desc(a), timestamp(b), value(c) {}
 
-	void setDesc(std::string d);   //Setting desc
+	void setDesc(int d);   //Setting desc
 
-	std::string getDesc();    //Getting desc
+	int getDesc();    //Getting desc
 
 	void setTimeStamp(std::string ts);   //Setting timestamp
 
